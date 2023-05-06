@@ -1,7 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaView } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createStackNavigator, Stack } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import HomeScreen from "./screens/HomeScreen";

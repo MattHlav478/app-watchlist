@@ -6,30 +6,24 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import { signUp } from "../scripts/userAuth";
+import { signIn } from "../scripts/userAuth";
 
-export default function SignupScreen() {
+export default function SignInScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  let password2;
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password !== password2) {
-      setError("Passwords do not match");
-    } else {
-      setEmail("");
-      setPassword("");
-      const res = await signUp(email, password);
-      if (res.error) setError(res.error);
-    }
+    setEmail("");
+    setPassword("");
+    const res = await signIn(email, password);
+    if (res.error) setError(res.error);
   };
 
   return (
     <View>
-      <Text>Sign Up</Text>
+      <Text>Sign In</Text>
       <TextInput
         value={email}
         placeholder="Email"
@@ -41,11 +35,6 @@ export default function SignupScreen() {
         secureTextEntry={true}
         placeholder="Password"
         onChange={(e) => setPassword(e.target.value)}
-      />
-      <TextInput
-        value={password2}
-        secureTextEntry={true}
-        placeholder="Reenter Password"
       />
       <TouchableOpacity onPress={handleSubmit}>Submit</TouchableOpacity>
     </View>

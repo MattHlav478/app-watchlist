@@ -4,15 +4,17 @@ import { SafeAreaView } from "react-native";
 import { createStackNavigator, Stack } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
+// import SignInScreen from "./screens/SigninScreen";
 import HomeScreen from "./screens/HomeScreen";
 import UserListScreen from "./screens/UserListScreen";
 import DetailsScreen from "./screens/DetailsScreen";
 import Header from "./components/Header";
 
+
 import { WatchListProvider } from "./contexts/WatchListContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-const MainStack = createStackNavigator();
+// const LoginStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const UserListStack = createStackNavigator();
 const Tab = createBottomTabNavigator();

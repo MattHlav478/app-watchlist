@@ -7,7 +7,7 @@ import {
 import { getFirestore, addDoc, collection } from "firebase/firestore";
 import { auth, db } from "../services/firebaseConnection"
 
-export const signUp = async (email, password) => {
+export const handleSignUp = async (email, password) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(
       auth,
@@ -25,7 +25,7 @@ export const signUp = async (email, password) => {
   }
 };
 
-export const signIn = async (email, password) => {
+export const handleSignIn = async (email, password) => {
   try {
     const userCredential = await signInWithEmailAndPassword(
       auth,
@@ -39,7 +39,7 @@ export const signIn = async (email, password) => {
   }
 };
 
-export const signOut = async () => {
+export const handleSignOut = async () => {
   try {
     await signOut(auth);
     return true;

@@ -1,14 +1,14 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
 
 const Header = ({ userInitial }) => {
   return (
     <View style={styles.headerContainer}>
       <Text style={styles.headerTitle}>WatchList</Text>
-      <TouchableOpacity style={styles.userInitialContainer}>
+      <Pressable style={styles.userInitialContainer}>
         <Text style={styles.loginText}>Login</Text>
-        <Text style={styles.userInitial}>{userInitial}</Text>
-      </TouchableOpacity>
+        {/* <Text style={styles.userInitial}>{userInitial}</Text> */}
+      </Pressable>
     </View>
   );
 };

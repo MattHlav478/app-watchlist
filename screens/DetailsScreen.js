@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 300,
     backgroundColor: '#1c1c2b',
+    paddingTop: "25px",
   },
   detailsContainer: {
     padding: 20,

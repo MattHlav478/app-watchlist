@@ -10,7 +10,6 @@ import UserListScreen from "./screens/UserListScreen";
 import DetailsScreen from "./screens/DetailsScreen";
 import Header from "./components/Header";
 
-
 import { WatchListProvider } from "./contexts/WatchListContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 

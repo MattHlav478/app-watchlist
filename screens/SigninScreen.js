@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { handleSignIn } from "../scripts/userAuth";
 
-export default function SignInScreen() {
+export default function SignInScreen({navigation}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -39,11 +39,16 @@ export default function SignInScreen() {
         placeholder="Password"
         onChangeText={(text) => setPassword(text)} // Use onChangeText for React Native
       />
-
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
-
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>Submit</Text>
+      </TouchableOpacity>
+      <Text style={styles.text}>Not a member?</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("SignUp")}
+      >
+        <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
     </View>
   );
@@ -62,6 +67,12 @@ const styles = StyleSheet.create({
     color: "white",
     marginBottom: 20,
   },
+  text: {
+    fontSize: 20,
+    color: "white",
+    marginBottom: 10,
+    marginTop: 50,
+  },
   input: {
     width: "100%",
     height: 50,
@@ -71,7 +82,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
-    width: "100%",
+    width: "50%",
     height: 50,
     backgroundColor: "#00adb5",
     justifyContent: "center",

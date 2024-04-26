@@ -1,26 +1,39 @@
-import React, { createContext, useState } from 'react';
-import preloadedMovies from './preloadedmovies';
+// Importing React and hooks from React library.
+import React, { createContext, useState } from "react";
+// Importing a list of preloaded movies to initialize the watch list.
+import preloadedMovies from "./preloadedmovies";
 
+// Creating a Context for the watch list which will be used to provide and consume the watch list data.
 export const WatchListContext = createContext();
 
+// Creating a Provider component that will wrap the children components and provide them with the watch list data.
 export const WatchListProvider = ({ children }) => {
+  // Initializing state for the watch list with preloaded movies.
   const [watchList, setWatchList] = useState(preloadedMovies);
 
+  // Function to add a movie to the watch list.
   const addToWatchList = (movie) => {
-    // Check if the movie is already in the watchlist
+    // Checking if the movie to be added already exists in the watch list based on its ID to prevent duplicates.
     const alreadyExists = watchList.some((item) => item.id === movie.id);
     if (!alreadyExists) {
+      // If the movie doesn't exist, add it to the current watch list and update the state.
       setWatchList([...watchList, movie]);
     }
   };
 
-    const removeFromWatchList = (movieId) => {
+  // Function to remove a movie from the watch list.
+  const removeFromWatchList = (movieId) => {
+    // Updating the watch list by filtering out the movie that matches the given ID.
     setWatchList(watchList.filter((movie) => movie.id !== movieId));
   };
 
+  // Returning the Provider component with the watch list state and functions as the value.
+  // This will allow any child component to access the watch list data and functions.
   return (
-    <WatchListContext.Provider value={{ watchList, setWatchList, addToWatchList, removeFromWatchList }}>
-      {children}
+    <WatchListContext.Provider
+      value={{ watchList, setWatchList, addToWatchList, removeFromWatchList }}
+    >
+      {children} {/* Rendering the children components passed to this Provider */}
     </WatchListContext.Provider>
   );
 };

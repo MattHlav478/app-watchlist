@@ -38,6 +38,8 @@ export default function UserListScreen({ navigation }) {
 
   useEffect(() => {
     setFilteredWatchList(watchList);
+    console.log(watchList)
+    console.log(filterWatchList)
   }, [watchList]);
 
   return (

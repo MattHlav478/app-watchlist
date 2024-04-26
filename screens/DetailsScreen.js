@@ -72,7 +72,7 @@ export default function DetailsScreen({ route }) {
         </Text>
         <Text style={styles.overview}>{movie.overview}</Text>
         <TouchableOpacity
-          style={styles.saveButton}
+          style={isSaved? styles.removeButton : styles.saveButton}
           onPress={handleSaveButtonClick}>
           <Text style={styles.saveButtonText}>
             {isSaved ? 'Remove from WatchList' : 'Save to WatchList'}
@@ -121,6 +121,12 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     backgroundColor: '#00adb5',
+    padding: 10,
+    alignItems: 'center',
+    borderRadius: 10,
+  },
+  removeButton: {
+    backgroundColor: '#ff4757',
     padding: 10,
     alignItems: 'center',
     borderRadius: 10,

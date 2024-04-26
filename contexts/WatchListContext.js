@@ -1,6 +1,4 @@
-// Importing React and hooks from React library.
 import React, { createContext, useState } from "react";
-// Importing a list of preloaded movies to initialize the watch list.
 import preloadedMovies from "./preloadedmovies";
 
 // Creating a Context for the watch list which will be used to provide and consume the watch list data.
@@ -8,7 +6,6 @@ export const WatchListContext = createContext();
 
 // Creating a Provider component that will wrap the children components and provide them with the watch list data.
 export const WatchListProvider = ({ children }) => {
-  // Initializing state for the watch list with preloaded movies.
   const [watchList, setWatchList] = useState(preloadedMovies);
 
   // Function to add a movie to the watch list.
@@ -33,7 +30,8 @@ export const WatchListProvider = ({ children }) => {
     <WatchListContext.Provider
       value={{ watchList, setWatchList, addToWatchList, removeFromWatchList }}
     >
-      {children} {/* Rendering the children components passed to this Provider */}
+      {/* Rendering the children components passed to this Provider */}
+      {children}
     </WatchListContext.Provider>
   );
 };

@@ -4,7 +4,7 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 const Header = ({ userInitial }) => {
   return (
     <View style={styles.headerContainer}>
-      <Text style={styles.headerTitle}>WatchList</Text>
+      <Text style={styles.headerTitle}>Y</Text>
       <Pressable style={styles.userInitialContainer}>
         <Text style={styles.loginText}>Login</Text>
         {/* <Text style={styles.userInitial}>{userInitial}</Text> */}

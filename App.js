@@ -37,7 +37,7 @@ function UserListStackScreen() {
         tabBarInactiveTintColor: "gray",
       }}
     >
-      <UserListStack.Screen name="UserList" component={UserListScreen} />
+      <UserListStack.Screen name="UserListStackScreen" component={UserListScreen} />
       <UserListStack.Screen name="Details" component={DetailsScreen} />
     </UserListStack.Navigator>
   );

@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { getAnalytics, isSupported } from "firebase/analytics";
 import { getFirestore } from 'firebase/firestore';
 import { getAuth } from "firebase/auth";
 
@@ -24,3 +24,14 @@ export const db = getFirestore(app);
 
 // Initialize and export Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
+
+// Initialize and export Firebase Analytics
+isSupported().then((supported) => {
+  if (supported) {
+    const analytics = getAnalytics();
+    // You can now use Firebase Analytics as intended.
+  } else {
+    console.warn("Firebase Analytics not supported in this environment");
+    // Handle the lack of analytics support.
+  }
+});

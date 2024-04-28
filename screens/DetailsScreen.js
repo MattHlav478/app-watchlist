@@ -25,6 +25,7 @@ export default function DetailsScreen({ route }) {
           `https://api.themoviedb.org/3/movie/${movieId}?api_key=70e3c8b4ed316240a366de839cbf765d`
         );
         const data = await response.json();
+        console.log("Movie details:", data)
         setMovie(data);
       } catch (error) {
         console.error("Error fetching movie details:", error);

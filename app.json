@@ -18,7 +18,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.lavat478.snack5dbfb7365c6b4ba5bdfc0bc1f7fc2c74"
     },
     "android": {
       "adaptiveIcon": {
@@ -28,6 +29,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "23deee1c-8c05-4ab0-9dd0-92f85eaead8d"
+      }
     }
   }
 }

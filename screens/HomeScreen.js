@@ -65,7 +65,8 @@ export default function HomeScreen({ navigation }) {
       const movies = await fetchMoviesByCategory(category.id);
       return {
         ...category,
-        movies: movies.slice(0, 10), // Get the 10 most recent movies
+        // Get the 10 most recent movies and sort by popularity
+        movies: movies.sort((a, b) => b.popularity - a.popularity).slice(0, 10)
       };
     });
 

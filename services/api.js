@@ -4,7 +4,7 @@ const API_BASE_URL = 'https://api.themoviedb.org/3';
 export const fetchMoviesByCategory = async (category, page = 1) => {
   try {
     const response = await fetch(
-      `${API_BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${category}&sort_by=primary_release_date.desc&primary_release_date.lte=${new Date().toISOString().split('T')[0]}&include_adult=false&include_video=false&page=${page}`
+      `${API_BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${category}&sort_by=popularity.desc&primary_release_date.lte=${new Date().toISOString().split('T')[0]}&include_adult=false&include_video=false&page=${page}`
     );
     const data = await response.json();
     return data.results;

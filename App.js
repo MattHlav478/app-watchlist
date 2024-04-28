@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaView } from "react-native";
 import { createStackNavigator, Stack } from "@react-navigation/stack";
@@ -27,10 +27,21 @@ const HomeStack = createStackNavigator();
 const UserListStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+export const UserFormContext = React.createContext();
+
 function AuthStackScreen({ navigation, user, setUser }) {
   return (
     <AuthStack.Navigator screenOptions={{ headerShown: false }}>
-      <AuthStack.Screen name="SignIn" component={SignInScreen} />
+      <AuthStack.Screen name="SignIn">
+        {(props) => (
+          <SignInScreen
+            {...props}
+            navigation={navigation}
+            user={user}
+            setUser={setUser}
+          />
+        )}
+      </AuthStack.Screen>
       <AuthStack.Screen name="SignUp">
         {(props) => (
           <SignupScreen
@@ -72,6 +83,7 @@ function UserListStackScreen() {
 
 export default function App() {
   const [user, setUser] = useState(false);
+  const [userFormData, setUserFormData] = useState({});
   const [userInitial, setUserInitial] = useState("!");
   const [loading, setLoading] = useState(true);
 
@@ -91,55 +103,57 @@ export default function App() {
 
   return (
     <WatchListProvider>
-      <NavigationContainer>
-        {user ? (
-          // User is signed in
-          <>
-            <Header userInitial={userInitial} />
-            <Tab.Navigator
-              screenOptions={{
-                headerShown: false,
-                tabBarStyle: {
-                  backgroundColor: "#1c1c2b",
-                  padding: "2%",
-                  height: 100,
-                },
-              }}
-            >
-              <Tab.Screen
-                name="HomeStack"
-                component={HomeStackScreen}
-                options={{
-                  tabBarLabel: "",
-                  tabBarIcon: ({ color, size }) => (
-                    <MaterialCommunityIcons
-                      name="magnify"
-                      color={color}
-                      size={size}
-                    />
-                  ),
+      <UserFormContext.Provider value={{ userFormData, setUserFormData }}>
+        <NavigationContainer>
+          {user ? (
+            // User is signed in
+            <>
+              <Header userInitial={userInitial} />
+              <Tab.Navigator
+                screenOptions={{
+                  headerShown: false,
+                  tabBarStyle: {
+                    backgroundColor: "#1c1c2b",
+                    padding: "2%",
+                    height: 100,
+                  },
                 }}
-              />
-              <Tab.Screen
-                name="UserList"
-                component={UserListStackScreen}
-                options={{
-                  tabBarLabel: "",
-                  tabBarIcon: ({ color, size }) => (
-                    <MaterialCommunityIcons
-                      name="format-list-bulleted"
-                      color={color}
-                      size={size}
-                    />
-                  ),
-                }}
-              />
-            </Tab.Navigator>
-          </>
-        ) : (
-          <AuthStackScreen user={user} setUser={setUser} />
-        )}
-      </NavigationContainer>
+              >
+                <Tab.Screen
+                  name="HomeStack"
+                  component={HomeStackScreen}
+                  options={{
+                    tabBarLabel: "",
+                    tabBarIcon: ({ color, size }) => (
+                      <MaterialCommunityIcons
+                        name="magnify"
+                        color={color}
+                        size={size}
+                      />
+                    ),
+                  }}
+                />
+                <Tab.Screen
+                  name="UserList"
+                  component={UserListStackScreen}
+                  options={{
+                    tabBarLabel: "",
+                    tabBarIcon: ({ color, size }) => (
+                      <MaterialCommunityIcons
+                        name="format-list-bulleted"
+                        color={color}
+                        size={size}
+                      />
+                    ),
+                  }}
+                />
+              </Tab.Navigator>
+            </>
+          ) : (
+            <AuthStackScreen user={user} setUser={setUser} />
+          )}
+        </NavigationContainer>
+      </UserFormContext.Provider>
     </WatchListProvider>
   );
 }

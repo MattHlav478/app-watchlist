@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -15,15 +15,12 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
+import { UserFormContext } from "../App";
 
-export default function SignupScreen({ navigation, user, setUser }) {
-  const [userFormData, setUserFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
-  const [error, setError] = useState("");
-
+export default function SignupScreen({ user, setUser, navigation }) {
+  const { userFormData, setUserFormData } = useContext(UserFormContext);
+  const { error, setError } = useState("");
+  
   const handleInputChange = (name, value) => {
     setUserFormData({ ...userFormData, [name]: value });
     // console.log(userFormData);

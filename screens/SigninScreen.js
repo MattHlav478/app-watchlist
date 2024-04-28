@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -7,17 +7,22 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { handleSignIn } from "../scripts/userAuth";
+import { UserFormContext } from "../App";
+import { set } from "firebase/database";
 
-export default function SignInScreen({ navigation }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export default function SignInScreen({ navigation, user, setUser }) {
+  const { userFormData, setUserFormData } = useContext(UserFormContext);
   const [error, setError] = useState("");
+
+  const handleInputChange = (name, value) => {
+    setUserFormData({ ...userFormData, [name]: value });
+    // console.log(userFormData);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setEmail("");
-    setPassword("");
-    const res = await handleSignIn(email, password);
+    const res = await handleSignIn(userFormData.email, userFormData.password);
+    setUser(true);
     if (res.error) setError(res.error);
   };
 
@@ -26,18 +31,19 @@ export default function SignInScreen({ navigation }) {
       <Text style={styles.title}>Sign In</Text>
       <TextInput
         style={styles.input}
-        value={email}
+        textContentType="emailAddress"
         placeholder="Email"
         placeholderTextColor="#aaaaaa"
         keyboardType="email-address"
-        onChangeText={(text) => setEmail(text)} // Use onChangeText for React Native
+        onChangeText={(text) => handleInputChange("email", text)}
+        required
       />
       <TextInput
         style={styles.input}
-        value={password}
         secureTextEntry={true}
         placeholder="Password"
-        onChangeText={(text) => setPassword(text)} // Use onChangeText for React Native
+        onChangeText={(text) => handleInputChange("password", text)}
+        required
       />
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>

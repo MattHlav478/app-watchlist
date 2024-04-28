@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -6,16 +6,17 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-} from 'react-native';
-import { useContext } from 'react';
-import { WatchListContext } from '../contexts/WatchListContext';
+} from "react-native";
+import { useContext } from "react";
+import { WatchListContext } from "../contexts/WatchListContext";
 
 export default function DetailsScreen({ route }) {
   const [movie, setMovie] = useState(null);
   const [isSaved, setIsSaved] = useState(false); // Add this line
   const movieId = route.params.movieId;
-  const { addToWatchList, removeFromWatchList, watchList } =
-    useContext(WatchListContext);
+  const { addToWatchList, removeFromWatchList, watchList } = useContext(
+    WatchListContext
+  );
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -26,7 +27,7 @@ export default function DetailsScreen({ route }) {
         const data = await response.json();
         setMovie(data);
       } catch (error) {
-        console.error('Error fetching movie details:', error);
+        console.error("Error fetching movie details:", error);
       }
     };
 
@@ -58,13 +59,15 @@ export default function DetailsScreen({ route }) {
 
   return (
     <ScrollView style={styles.container}>
-      <Image
-        source={{
-          uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-        }}
-        style={styles.image}
-        resizeMode="contain"
-      />
+      <View style={styles.imageContainer}>
+        <Image
+          source={{
+            uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+          }}
+          style={styles.image}
+          resizeMode="contain"
+        />
+      </View>
       <View style={styles.detailsContainer}>
         <Text style={styles.title}>{movie.title}</Text>
         <Text style={styles.releaseDate}>
@@ -72,10 +75,11 @@ export default function DetailsScreen({ route }) {
         </Text>
         <Text style={styles.overview}>{movie.overview}</Text>
         <TouchableOpacity
-          style={isSaved? styles.removeButton : styles.saveButton}
-          onPress={handleSaveButtonClick}>
+          style={isSaved ? styles.removeButton : styles.saveButton}
+          onPress={handleSaveButtonClick}
+        >
           <Text style={styles.saveButtonText}>
-            {isSaved ? 'Remove from WatchList' : 'Save to WatchList'}
+            {isSaved ? "Remove from WatchList" : "Save to WatchList"}
           </Text>
         </TouchableOpacity>
       </View>
@@ -86,53 +90,55 @@ export default function DetailsScreen({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1c1c2b',
+    backgroundColor: "#1c1c2b",
   },
   loadingText: {
-    color: '#ffffff',
+    color: "#ffffff",
     fontSize: 20,
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 20,
   },
   image: {
-    width: '100%',
+    width: "100%",
     height: 300,
-    backgroundColor: '#1c1c2b',
-    paddingTop: "25px",
+    backgroundColor: "#1c1c2b",
+  },
+  imageContainer: {
+    padding: 20,
   },
   detailsContainer: {
     padding: 20,
   },
   title: {
-    color: '#ffffff',
+    color: "#ffffff",
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
   },
   releaseDate: {
-    color: '#ffffff',
+    color: "#ffffff",
     fontSize: 18,
     marginBottom: 10,
   },
   overview: {
-    color: '#ffffff',
+    color: "#ffffff",
     fontSize: 16,
     marginBottom: 20,
   },
   saveButton: {
-    backgroundColor: '#00adb5',
+    backgroundColor: "#00adb5",
     padding: 10,
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: 10,
   },
   removeButton: {
-    backgroundColor: '#ff4757',
+    backgroundColor: "#ff4757",
     padding: 10,
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: 10,
   },
   saveButtonText: {
-    color: '#ffffff',
+    color: "#ffffff",
     fontSize: 18,
   },
 });

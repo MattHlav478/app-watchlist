@@ -5,6 +5,7 @@ import { createStackNavigator, Stack } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { auth } from "./services/firebaseConnection";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import SignInScreen from "./screens/SigninScreen";
 import SignupScreen from "./screens/SignupScreen";
@@ -15,11 +16,14 @@ import DetailsScreen from "./screens/DetailsScreen";
 // import components
 import Header from "./components/Header";
 
+import { handleSignIn } from "./scripts/userAuth";
+
 // import contexts
 import { WatchListProvider } from "./contexts/WatchListContext";
 
 // import icons
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { set } from "firebase/database";
 
 // create stack navigators
 const AuthStack = createStackNavigator();
@@ -29,63 +33,44 @@ const Tab = createBottomTabNavigator();
 
 export const UserFormContext = React.createContext();
 
-function AuthStackScreen({ navigation, user, setUser }) {
-  return (
-    <AuthStack.Navigator screenOptions={{ headerShown: false }}>
-      <AuthStack.Screen name="SignIn">
-        {(props) => (
-          <SignInScreen
-            {...props}
-            navigation={navigation}
-            user={user}
-            setUser={setUser}
-          />
-        )}
-      </AuthStack.Screen>
-      <AuthStack.Screen name="SignUp">
-        {(props) => (
-          <SignupScreen
-            {...props}
-            navigation={navigation}
-            user={user}
-            setUser={setUser}
-          />
-        )}
-      </AuthStack.Screen>
-    </AuthStack.Navigator>
-  );
-}
-
-function HomeStackScreen() {
-  return (
-    <HomeStack.Navigator screenOptions={{ headerShown: false }}>
-      <HomeStack.Screen name="Home" component={HomeScreen} />
-      <HomeStack.Screen name="Details" component={DetailsScreen} />
-    </HomeStack.Navigator>
-  );
-}
-
-function UserListStackScreen() {
-  return (
-    <UserListStack.Navigator
-      screenOptions={{
-        headerShown: false,
-        background: "blue",
-        tabBarActiveTintColor: "#1c1c2b",
-        tabBarInactiveTintColor: "gray",
-      }}
-    >
-      <UserListStack.Screen name="UserListStackScreen" component={UserListScreen} />
-      <UserListStack.Screen name="Details" component={DetailsScreen} />
-    </UserListStack.Navigator>
-  );
-}
-
 export default function App() {
   const [user, setUser] = useState(false);
   const [userFormData, setUserFormData] = useState({});
   const [userInitial, setUserInitial] = useState("!");
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const logAllStorage = async () => {
+      try {
+        const keys = await AsyncStorage.getAllKeys(); // Retrieve all keys stored
+        const items = await AsyncStorage.multiGet(keys); // Get all items for these keys
+        console.log("storage items", items);
+      } catch (error) {
+        console.error("Failed to log storage:", error);
+      }
+    };
+
+    const checkSignInStatus = async () => {
+      try {
+        const email = await AsyncStorage.getItem("email");
+        const password = await AsyncStorage.getItem("password");
+        if (email !== null) {
+          await handleSignIn(email, password);
+          // The user is signed in
+          console.log("User is signed in");
+          setUser(true);
+        } else if (email === null) {
+          // The user is not signed in
+          console.log("User is not signed in");
+        }
+      } catch (error) {
+        // Error retrieving data
+      }
+    };
+    // AsyncStorage.clear();
+    logAllStorage();
+    checkSignInStatus();
+  }, []);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -155,5 +140,60 @@ export default function App() {
         </NavigationContainer>
       </UserFormContext.Provider>
     </WatchListProvider>
+  );
+}
+
+function AuthStackScreen({ navigation, user, setUser }) {
+  return (
+    <AuthStack.Navigator screenOptions={{ headerShown: false }}>
+      <AuthStack.Screen name="SignIn">
+        {(props) => (
+          <SignInScreen
+            {...props}
+            navigation={navigation}
+            user={user}
+            setUser={setUser}
+          />
+        )}
+      </AuthStack.Screen>
+      <AuthStack.Screen name="SignUp">
+        {(props) => (
+          <SignupScreen
+            {...props}
+            navigation={navigation}
+            user={user}
+            setUser={setUser}
+          />
+        )}
+      </AuthStack.Screen>
+    </AuthStack.Navigator>
+  );
+}
+
+function HomeStackScreen() {
+  return (
+    <HomeStack.Navigator screenOptions={{ headerShown: false }}>
+      <HomeStack.Screen name="Home" component={HomeScreen} />
+      <HomeStack.Screen name="Details" component={DetailsScreen} />
+    </HomeStack.Navigator>
+  );
+}
+
+function UserListStackScreen() {
+  return (
+    <UserListStack.Navigator
+      screenOptions={{
+        headerShown: false,
+        background: "blue",
+        tabBarActiveTintColor: "#1c1c2b",
+        tabBarInactiveTintColor: "gray",
+      }}
+    >
+      <UserListStack.Screen
+        name="UserListStackScreen"
+        component={UserListScreen}
+      />
+      <UserListStack.Screen name="Details" component={DetailsScreen} />
+    </UserListStack.Navigator>
   );
 }

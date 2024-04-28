@@ -6,6 +6,7 @@ import {
 } from "firebase/auth";
 import { getFirestore, addDoc, collection } from "firebase/firestore";
 import { auth, db } from "../services/firebaseConnection";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const handleSignUp = async (email, password) => {
   try {
@@ -30,6 +31,15 @@ export const handleSignIn = async (email, password) => {
     await signInWithEmailAndPassword(auth, email, password);
   } catch (error) {
     return { error: error.message };
+  }
+  // After signing in, save the sign-in status to AsyncStorage
+  try {
+    const idToken = await auth.currentUser.getIdToken();
+    await AsyncStorage.setItem("firebaseAuthToken", idToken);
+    await AsyncStorage.setItem("email", email);
+    await AsyncStorage.setItem("password", password);
+  } catch (error) {
+    // Error saving data
   }
 };
 

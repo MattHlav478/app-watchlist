@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native";
 import { createStackNavigator, Stack } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { auth } from "./services/firebaseConnection";
 
 import SignInScreen from "./screens/SigninScreen";
 import SignupScreen from "./screens/SignupScreen";
@@ -26,11 +27,20 @@ const HomeStack = createStackNavigator();
 const UserListStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function AuthStackScreen() {
+function AuthStackScreen({ navigation, user, setUser }) {
   return (
     <AuthStack.Navigator screenOptions={{ headerShown: false }}>
       <AuthStack.Screen name="SignIn" component={SignInScreen} />
-      <AuthStack.Screen name="SignUp" component={SignupScreen} />
+      <AuthStack.Screen name="SignUp">
+        {(props) => (
+          <SignupScreen
+            {...props}
+            navigation={navigation}
+            user={user}
+            setUser={setUser}
+          />
+        )}
+      </AuthStack.Screen>
     </AuthStack.Navigator>
   );
 }
@@ -64,20 +74,21 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-    });
+  // useEffect(() => {
+  //   // const auth = getAuth();
+  //   const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+  //     setUser(currentUser);
+  //     setLoading(false);
+  //   });
+  //   console.log(`User: ${auth}`);
 
-    return unsubscribe; // Unsubscribe on unmount
-  }, []);
+  //   return unsubscribe; // Unsubscribe on unmount
+  // }, [auth]);
 
-  if (loading) {
-    // can return a loading spinner here
-    return null; // Or return null to render nothing
-  }
+  // if (loading) {
+  // can return a loading spinner here
+  //   return null; // Or return null to render nothing
+  // }
 
   return (
     <WatchListProvider>
@@ -127,7 +138,7 @@ export default function App() {
             </Tab.Navigator>
           </>
         ) : (
-          <AuthStackScreen />
+            <AuthStackScreen user={user} setUser={setUser} />
         )}
       </NavigationContainer>
     </WatchListProvider>

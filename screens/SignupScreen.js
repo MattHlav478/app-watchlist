@@ -6,59 +6,94 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import { signUp } from "../scripts/userAuth";
+import { handleSignUp } from "../scripts/userAuth";
+import { set } from "firebase/database";
+import { auth } from "../services/firebaseConnection";
+import {
+  connectAuthEmulator,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+} from "firebase/auth";
 
-export default function SignupScreen() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export default function SignupScreen({ navigation, user, setUser }) {
+  const [userFormData, setUserFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
   const [error, setError] = useState("");
 
-  let password2;
+  const handleInputChange = (name, value) => {
+    setUserFormData({ ...userFormData, [name]: value });
+    // console.log(userFormData);
+  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (password !== password2) {
-      setError("Passwords do not match");
-    } else {
-      setEmail("");
-      setPassword("");
-      const res = await signUp(email, password);
-      if (res.error) setError(res.error);
+  const handleFormSubmit = async () => {
+    console.log("submit clicked!");
+    try {
+      console.log(userFormData);
+      // Assuming handleSignUp is properly defined to manage Firebase signup
+      // const userCredential = await handleSignUp(userFormData.email, userFormData.password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        userFormData.email,
+        userFormData.password
+      );
+      // After signup is successful, navigate to another screen
+      auth.onAuthStateChanged(function (user) {
+        if (user) {
+          // addDoc(collection(db, "users"), {
+          //   uid: user.uid,
+          //   email: user.email,
+          // });
+          console.log(`User: ${user}`);
+          setUser(true);
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      setError(error.message);
     }
   };
-  
- return (
+
+  return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign Up</Text>
       <TextInput
         style={styles.input}
-        value={email}
-        placeholder="Email"
+        textContentType="emailAddress"
+        placeholder="Username"
         placeholderTextColor="#aaaaaa"
-        keyboardType="email-address"
-        onChangeText={(text) => setEmail(text)} // Use onChangeText for React Native
+        keyboardType="default"
+        onChangeText={(text) => handleInputChange("username", text)}
+        required
       />
       <TextInput
         style={styles.input}
-        value={password}
-        secureTextEntry={true}
-        placeholder="Password"
-        onChangeText={(text) => setPassword(text)} // Use onChangeText for React Native
+        textContentType="emailAddress"
+        placeholder="Email"
+        placeholderTextColor="#aaaaaa"
+        keyboardType="email-address"
+        onChangeText={(text) => handleInputChange("email", text)}
+        required
       />
       <TextInput
+        style={styles.input}
+        secureTextEntry={true}
+        placeholder="Password"
+        onChangeText={(text) => handleInputChange("password", text)}
+        required
+      />
+      {/* <TextInput
         style={styles.input}
         value={password2}
         secureTextEntry={true}
         placeholder="Password"
         onChangeText={(text) => setPassword(text)} // Use onChangeText for React Native
-      />
+      /> */}
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+      <TouchableOpacity style={styles.button} onPress={handleFormSubmit}>
         <Text style={styles.buttonText}>Submit</Text>
-      </TouchableOpacity>
-      <Text style={styles.text}>Not a member?</Text>
-     <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
     </View>
   );
@@ -110,4 +145,3 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-

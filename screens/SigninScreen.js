@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { handleSignIn } from "../scripts/userAuth";
 
-export default function SignInScreen({navigation}) {
+export default function SignInScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

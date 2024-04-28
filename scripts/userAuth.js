@@ -5,7 +5,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { getFirestore, addDoc, collection } from "firebase/firestore";
-import { auth, db } from "../services/firebaseConnection"
+import { auth, db } from "../services/firebaseConnection";
 
 export const handleSignUp = async (email, password) => {
   try {
@@ -27,13 +27,7 @@ export const handleSignUp = async (email, password) => {
 
 export const handleSignIn = async (email, password) => {
   try {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    const user = userCredential.user;
-    return true;
+    await signInWithEmailAndPassword(auth, email, password);
   } catch (error) {
     return { error: error.message };
   }

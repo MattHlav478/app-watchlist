@@ -71,24 +71,23 @@ function UserListStackScreen() {
 }
 
 export default function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(false);
+  const [userInitial, setUserInitial] = useState("!");
   const [loading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   // const auth = getAuth();
-  //   const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-  //     setUser(currentUser);
-  //     setLoading(false);
-  //   });
-  //   console.log(`User: ${auth}`);
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        console.log(`user: ${user.email}`);
+        setUserInitial(user.email[0].toUpperCase());
+      } else {
+        console.log("No user is signed in");
+      }
+    });
 
-  //   return unsubscribe; // Unsubscribe on unmount
-  // }, [auth]);
-
-  // if (loading) {
-  // can return a loading spinner here
-  //   return null; // Or return null to render nothing
-  // }
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
 
   return (
     <WatchListProvider>
@@ -96,7 +95,7 @@ export default function App() {
         {user ? (
           // User is signed in
           <>
-            <Header userInitial={user?.email?.[0]?.toUpperCase()} />
+            <Header userInitial={userInitial} />
             <Tab.Navigator
               screenOptions={{
                 headerShown: false,
@@ -138,7 +137,7 @@ export default function App() {
             </Tab.Navigator>
           </>
         ) : (
-            <AuthStackScreen user={user} setUser={setUser} />
+          <AuthStackScreen user={user} setUser={setUser} />
         )}
       </NavigationContainer>
     </WatchListProvider>

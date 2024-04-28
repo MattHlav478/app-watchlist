@@ -8,7 +8,8 @@ import {
 } from "react-native";
 import { handleSignUp } from "../scripts/userAuth";
 import { set } from "firebase/database";
-import { auth } from "../services/firebaseConnection";
+import { getFirestore, addDoc, collection } from "firebase/firestore";
+import { auth, db } from "../services/firebaseConnection";
 import {
   connectAuthEmulator,
   createUserWithEmailAndPassword,
@@ -32,9 +33,7 @@ export default function SignupScreen({ navigation, user, setUser }) {
     console.log("submit clicked!");
     try {
       console.log(userFormData);
-      // Assuming handleSignUp is properly defined to manage Firebase signup
-      // const userCredential = await handleSignUp(userFormData.email, userFormData.password);
-      const userCredential = await createUserWithEmailAndPassword(
+      await createUserWithEmailAndPassword(
         auth,
         userFormData.email,
         userFormData.password
@@ -42,11 +41,11 @@ export default function SignupScreen({ navigation, user, setUser }) {
       // After signup is successful, navigate to another screen
       auth.onAuthStateChanged(function (user) {
         if (user) {
-          // addDoc(collection(db, "users"), {
-          //   uid: user.uid,
-          //   email: user.email,
-          // });
-          console.log(`User: ${user}`);
+          addDoc(collection(db, "users"), {
+            uid: user.uid,
+            email: user.email,
+          });
+          console.log(`User: ${user.email} signed up successfully!`);
           setUser(true);
         }
       });

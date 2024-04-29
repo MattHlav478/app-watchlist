@@ -40,15 +40,15 @@ export default function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const logAllStorage = async () => {
-      try {
-        const keys = await AsyncStorage.getAllKeys(); // Retrieve all keys stored
-        const items = await AsyncStorage.multiGet(keys); // Get all items for these keys
-        console.log("storage items", items);
-      } catch (error) {
-        console.error("Failed to log storage:", error);
-      }
-    };
+    // const logAllStorage = async () => {
+    //   try {
+    //     const keys = await AsyncStorage.getAllKeys(); // Retrieve all keys stored
+    //     const items = await AsyncStorage.multiGet(keys); // Get all items for these keys
+    //     console.log("storage items", items);
+    //   } catch (error) {
+    //     console.error("Failed to log storage:", error);
+    //   }
+    // };
 
     const checkSignInStatus = async () => {
       try {
@@ -68,7 +68,7 @@ export default function App() {
       }
     };
     // AsyncStorage.clear();
-    logAllStorage();
+    // logAllStorage();
     checkSignInStatus();
   }, []);
 

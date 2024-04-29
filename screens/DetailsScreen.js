@@ -18,14 +18,16 @@ export default function DetailsScreen({ route }) {
     WatchListContext
   );
 
+const apiKey = process.env.EXPO_PUBLIC_TMDB_API_KEY;
+
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
         const response = await fetch(
-          `https://api.themoviedb.org/3/movie/${movieId}?api_key=70e3c8b4ed316240a366de839cbf765d`
+          `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=en-US`
         );
         const data = await response.json();
-        console.log("Movie details:", data)
+        console.log("Movie details:", data);
         setMovie(data);
       } catch (error) {
         console.error("Error fetching movie details:", error);

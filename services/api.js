@@ -1,4 +1,4 @@
-const API_KEY = '70e3c8b4ed316240a366de839cbf765d';
+const API_KEY = process.env.EXPO_PUBLIC_TMDB_API_KEY;
 const API_BASE_URL = 'https://api.themoviedb.org/3';
 
 export const fetchMoviesByCategory = async (category, page = 1) => {

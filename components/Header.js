@@ -1,17 +1,29 @@
 import { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import NavMenu from "./NavMenu";
 
-const Header = ({ userInitial }) => {
-  useEffect(() => {
-    console.log(`userInitial: ${userInitial}`);
-  }, [userInitial]);
+const Header = ({ userInitial, navOpen, setNavOpen }) => {
+
+  // useEffect(() => {
+  //   // Add event listener to close nav panel when clicking outside of it
+  //   const handleClick = (event) => {
+  //     if (navOpen && !ref.current.contains(event.target)) {
+  //       setNavOpen(false);
+  //     }
+  //   };
+  // }, [navOpen]);
+
+  const handleNav = () => {
+    setNavOpen((current) => !current);
+  };
 
   return (
     <View style={styles.headerContainer}>
       <Text style={styles.headerTitle}>WatchList</Text>
-      <TouchableOpacity style={styles.userInitialContainer}>
+      <TouchableOpacity style={styles.userInitialContainer} onPress={handleNav}>
         <Text style={styles.userInitial}>{userInitial}</Text>
       </TouchableOpacity>
+      {navOpen && <NavMenu navOpen={navOpen} setNavOpen={setNavOpen} />}
     </View>
   );
 };
@@ -33,6 +45,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   userInitialContainer: {
+    position: "fixed",
     width: 40,
     height: 40,
     marginRight: 20,

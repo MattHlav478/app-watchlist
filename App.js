@@ -1,4 +1,5 @@
 import React, { useState, useEffect, createContext } from "react";
+import { View, StyleSheet, Modal } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaView } from "react-native";
 import { createStackNavigator, Stack } from "@react-navigation/stack";
@@ -15,6 +16,7 @@ import DetailsScreen from "./screens/DetailsScreen";
 
 // import components
 import Header from "./components/Header";
+import NavMenu from "./components/NavMenu";
 
 import { handleSignIn } from "./scripts/userAuth";
 
@@ -38,6 +40,7 @@ export default function App() {
   const [userFormData, setUserFormData] = useState({});
   const [userInitial, setUserInitial] = useState("!");
   const [loading, setLoading] = useState(true);
+  const [navOpen, setNavOpen] = useState(false);
 
   useEffect(() => {
     // const logAllStorage = async () => {
@@ -91,9 +94,35 @@ export default function App() {
       <UserFormContext.Provider value={{ userFormData, setUserFormData }}>
         <NavigationContainer>
           {user ? (
-            // User is signed in
-            <>
-              <Header userInitial={userInitial} />
+            <View style={styles.appContainer}>
+              {/* <Header
+                userInitial={userInitial}
+                setNavOpen={setNavOpen}
+                navOpen={navOpen}
+              /> */}
+              <Modal
+                animationType="slide"
+                transparent={true}
+              >
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text>This is a modal!</Text>
+                  <Text>This is a modal!</Text>
+                  <Text>This is a modal!</Text>
+                  <Text>This is a modal!</Text>
+                  <Text>This is a modal!</Text>
+                  <Text>This is a modal!</Text>
+                  <Text>This is a modal!</Text>
+                  <Text>This is a modal!</Text>
+                  <Text>This is a modal!</Text>
+                  <Text>This is a modal!</Text>
+                </View>
+              </Modal>
               <Tab.Navigator
                 screenOptions={{
                   headerShown: false,
@@ -133,7 +162,7 @@ export default function App() {
                   }}
                 />
               </Tab.Navigator>
-            </>
+            </View>
           ) : (
             <AuthStackScreen user={user} setUser={setUser} />
           )}
@@ -142,6 +171,12 @@ export default function App() {
     </WatchListProvider>
   );
 }
+const styles = StyleSheet.create({
+  appContainer: {
+    flex: 1,
+    position: "relative", // This ensures that absolutely positioned children can be placed relative to this container
+  },
+});
 
 function AuthStackScreen({ navigation, user, setUser }) {
   return (

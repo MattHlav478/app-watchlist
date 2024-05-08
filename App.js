@@ -95,34 +95,11 @@ export default function App() {
         <NavigationContainer>
           {user ? (
             <View style={styles.appContainer}>
-              {/* <Header
+              <Header
                 userInitial={userInitial}
                 setNavOpen={setNavOpen}
                 navOpen={navOpen}
-              /> */}
-              <Modal
-                animationType="slide"
-                transparent={true}
-              >
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text>This is a modal!</Text>
-                  <Text>This is a modal!</Text>
-                  <Text>This is a modal!</Text>
-                  <Text>This is a modal!</Text>
-                  <Text>This is a modal!</Text>
-                  <Text>This is a modal!</Text>
-                  <Text>This is a modal!</Text>
-                  <Text>This is a modal!</Text>
-                  <Text>This is a modal!</Text>
-                  <Text>This is a modal!</Text>
-                </View>
-              </Modal>
+              />
               <Tab.Navigator
                 screenOptions={{
                   headerShown: false,

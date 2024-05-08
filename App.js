@@ -100,29 +100,6 @@ export default function App() {
                 setNavOpen={setNavOpen}
                 navOpen={navOpen}
               /> */}
-              <Modal
-                animationType="slide"
-                transparent={true}
-              >
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text>This is a modal!</Text>
-                  <Text>This is a modal!</Text>
-                  <Text>This is a modal!</Text>
-                  <Text>This is a modal!</Text>
-                  <Text>This is a modal!</Text>
-                  <Text>This is a modal!</Text>
-                  <Text>This is a modal!</Text>
-                  <Text>This is a modal!</Text>
-                  <Text>This is a modal!</Text>
-                  <Text>This is a modal!</Text>
-                </View>
-              </Modal>
               <Tab.Navigator
                 screenOptions={{
                   headerShown: false,
@@ -138,15 +115,19 @@ export default function App() {
                   component={HomeStackScreen}
                   options={{
                     tabBarLabel: "",
-                    tabBarIcon: ({ color, size }) => (
-                      <MaterialCommunityIcons
-                        name="magnify"
-                        color={color}
-                        size={size}
-                      />
-                    ),
+                    tabBarIcon: ({ color, size }) => {
+                      console.log("Icon color:", color, "Size:", size); // Debug output
+                      return (
+                        <MaterialCommunityIcons
+                          name="magnify"
+                          color="yellow"
+                          size={30}
+                        />
+                      );
+                    },
                   }}
                 />
+
                 <Tab.Screen
                   name="UserList"
                   component={UserListStackScreen}

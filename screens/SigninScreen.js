@@ -9,7 +9,7 @@ import {
 import { handleSignIn } from "../scripts/userAuth";
 import { set } from "firebase/database";
 
-export default function SignInScreen({ navigation, user, setUser }) {
+export default function SignInScreen({ navigation, user, setUser, UserFormContext }) {
   const { userFormData, setUserFormData } = useContext(UserFormContext);
   const [error, setError] = useState("");
 

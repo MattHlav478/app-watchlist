@@ -16,7 +16,7 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 
-export default function SignupScreen({ user, setUser, navigation }) {
+export default function SignupScreen({ user, setUser, navigation, UserFormContext }) {
   const { userFormData, setUserFormData } = useContext(UserFormContext);
   const { error, setError } = useState("");
   

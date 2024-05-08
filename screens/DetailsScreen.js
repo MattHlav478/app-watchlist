@@ -27,7 +27,7 @@ const apiKey = process.env.EXPO_PUBLIC_TMDB_API_KEY;
           `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=en-US`
         );
         const data = await response.json();
-        console.log("Movie details:", data);
+        // console.log("Movie details:", data);
         setMovie(data);
       } catch (error) {
         console.error("Error fetching movie details:", error);

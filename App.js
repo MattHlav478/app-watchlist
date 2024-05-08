@@ -99,7 +99,7 @@ export default function App() {
                 userInitial={userInitial}
                 setNavOpen={setNavOpen}
                 navOpen={navOpen}
-              />
+              /> */}
               <Tab.Navigator
                 screenOptions={{
                   headerShown: false,
@@ -115,15 +115,19 @@ export default function App() {
                   component={HomeStackScreen}
                   options={{
                     tabBarLabel: "",
-                    tabBarIcon: ({ color, size }) => (
-                      <MaterialCommunityIcons
-                        name="magnify"
-                        color={color}
-                        size={size}
-                      />
-                    ),
+                    tabBarIcon: ({ color, size }) => {
+                      console.log("Icon color:", color, "Size:", size); // Debug output
+                      return (
+                        <MaterialCommunityIcons
+                          name="magnify"
+                          color="yellow"
+                          size={30}
+                        />
+                      );
+                    },
                   }}
                 />
+
                 <Tab.Screen
                   name="UserList"
                   component={UserListStackScreen}

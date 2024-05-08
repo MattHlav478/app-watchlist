@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { handleSignIn } from "../scripts/userAuth";
-import { UserFormContext } from "../App";
 import { set } from "firebase/database";
 
 export default function SignInScreen({ navigation, user, setUser }) {

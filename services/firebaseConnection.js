@@ -16,7 +16,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// const analytics = getAnalytics(app);
 
 // Initialize and export Firestore and get a reference to the service
 export const db = getFirestore(app);
@@ -26,12 +26,12 @@ export const db = getFirestore(app);
 export const auth = getAuth(app);
 
 // Initialize and export Firebase Analytics
-isSupported().then((supported) => {
-  if (supported) {
-    const analytics = getAnalytics();
+// isSupported().then((supported) => {
+  // if (supported) {
+  //   const analytics = getAnalytics();
     // You can now use Firebase Analytics as intended.
-  } else {
-    console.warn("Firebase Analytics not supported in this environment");
+  // } else {
+    // console.warn("Firebase Analytics not supported in this environment");
     // Handle the lack of analytics support.
-  }
-});
+  // }
+// });

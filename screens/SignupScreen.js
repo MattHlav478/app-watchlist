@@ -15,7 +15,6 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
-import { UserFormContext } from "../App";
 
 export default function SignupScreen({ user, setUser, navigation }) {
   const { userFormData, setUserFormData } = useContext(UserFormContext);

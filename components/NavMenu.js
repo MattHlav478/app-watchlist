@@ -4,36 +4,36 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-    ScrollView,
-  Modal
+  ScrollView,
+  Modal,
 } from "react-native";
 
 export default function NavMenu({ navOpen, setNavOpen }) {
-    // if (!navOpen) return null;
-    const [modalVisible, setModalVisible] = useState(true);
+  // if (!navOpen) return null;
+  const [modalVisible, setModalVisible] = useState(true);
 
   return (
-   <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text>This is a modal!</Text>
-          <Text>This is a modal!</Text>
-          <Text>This is a modal!</Text>
-          <Text>This is a modal!</Text>
-          <Text>This is a modal!</Text>
-          <Text>This is a modal!</Text>
-          <Text>This is a modal!</Text>
-          <Text>This is a modal!</Text>
-          <Text>This is a modal!</Text>
-          <Text>This is a modal!</Text>
-        </View>
-      </Modal>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={modalVisible}
+      onRequestClose={() => {
+        setModalVisible(!modalVisible);
+      }}
+    >
+      <View style={[styles.navPanel]}>
+        <TouchableOpacity
+          onPress={() => {
+            setModalVisible(!modalVisible);
+            console.log("X clicked");
+          }}
+        >
+          <Text style={[styles.navText]}>X</Text>
+        </TouchableOpacity>
+        <Text style={[styles.navText]}>Dashboard</Text>
+        <Text style={[styles.navText]}>Settings</Text>
+      </View>
+    </Modal>
   );
 }
 
@@ -48,8 +48,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: "100%",
     height: "100%",
-    // backgroundColor: "rgba(0, 0, 0, 0.5)",
-    backgroundColor: "red",
+    backgroundColor: "#1c1c2b",
     justifyContent: "center", // Center the content vertically
     alignItems: "center", // Center the content horizontally
   },

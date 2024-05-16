@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import NavMenu from "./NavMenu";
 
-const Header = ({ userInitial, navOpen, setNavOpen }) => {
+const Header = ({ userInitial}) => {
 
   // useEffect(() => {
   //   // Add event listener to close nav panel when clicking outside of it

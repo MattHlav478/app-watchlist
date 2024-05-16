@@ -40,7 +40,6 @@ export default function App() {
   const [userFormData, setUserFormData] = useState({});
   const [userInitial, setUserInitial] = useState("!");
   const [loading, setLoading] = useState(true);
-  const [navOpen, setNavOpen] = useState(false);
 
   useEffect(() => {
     // const logAllStorage = async () => {
@@ -97,8 +96,6 @@ export default function App() {
             <View style={styles.appContainer}>
               <Header
                 userInitial={userInitial}
-                setNavOpen={setNavOpen}
-                navOpen={navOpen}
               />
               <Tab.Navigator
                 screenOptions={{

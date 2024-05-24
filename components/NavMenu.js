@@ -8,23 +8,23 @@ import {
   Modal,
 } from "react-native";
 
-export default function NavMenu({ navOpen, setNavOpen }) {
+export default function NavMenu({navOpen, setNavOpen}) {
   // if (!navOpen) return null;
-  const [modalVisible, setModalVisible] = useState(true);
+  // const [navOpen, setNavOpen] = useState(true);
 
   return (
     <Modal
       animationType="slide"
       transparent={true}
-      visible={modalVisible}
+      visible={navOpen}
       onRequestClose={() => {
-        setModalVisible(!modalVisible);
+        setNavOpen(!navOpen);
       }}
     >
       <View style={[styles.navPanel]}>
         <TouchableOpacity
           onPress={() => {
-            setModalVisible(!modalVisible);
+            setNavOpen(!navOpen);
             console.log("X clicked");
           }}
         >

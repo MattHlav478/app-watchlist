@@ -10,6 +10,18 @@ import {
 import { useContext } from "react";
 import { WatchListContext } from "../contexts/WatchListContext";
 
+import { db, auth } from "../services/firebaseConnection";
+import {
+  doc,
+  addDoc,
+  setDoc,
+  updateDoc,
+  collection,
+  getDoc,
+  Timestamp,
+  serverTimestamp,
+} from "firebase/firestore";
+
 export default function DetailsScreen({ route }) {
   const [movie, setMovie] = useState(null);
   const [isSaved, setIsSaved] = useState(false); // Add this line
@@ -18,7 +30,7 @@ export default function DetailsScreen({ route }) {
     WatchListContext
   );
 
-const apiKey = process.env.EXPO_PUBLIC_TMDB_API_KEY;
+  const apiKey = process.env.EXPO_PUBLIC_TMDB_API_KEY;
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -50,12 +62,34 @@ const apiKey = process.env.EXPO_PUBLIC_TMDB_API_KEY;
     );
   }
 
-  const handleSaveButtonClick = () => {
+  const handleSaveButtonClick = async () => {
     if (isSaved) {
       removeFromWatchList(movie.id);
       setIsSaved(false);
     } else {
       addToWatchList(movie);
+
+      // add to movie to firebase
+      console.log(`Movie to be saved: ${movie.title}`);
+
+      const user = auth.currentUser;
+      let userMovieList = (await getDoc(doc(db, "movies", user.email))).data()
+        .movies;
+      console.log(`User's movie list: ${userMovieList}`);
+      await setDoc(doc(db, "movies", user.email), {
+        // push new movie title to movies array in firebase
+        movies:
+          [...userMovieList,
+          movie.title],
+      });
+      await setDoc(doc(db, "users", user.email), {
+        timestamp: Date.now(),
+      });
+      await setDoc(doc(db, "test_messages", user.email), {
+        // to: (await getDoc(doc(db, "users", user.email))),
+        body: `You added ${movie.title} to your watchlist!`,
+      });
+
       setIsSaved(true);
     }
   };

@@ -46,6 +46,9 @@ export const handleSignIn = async (email, password) => {
 export const handleSignOut = async () => {
   try {
     await signOut(auth);
+    await AsyncStorage.removeItem("firebaseAuthToken");
+    await AsyncStorage.removeItem("email");
+    await AsyncStorage.removeItem("password");
     return true;
   } catch (error) {
     return false;

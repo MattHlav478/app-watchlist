@@ -8,9 +8,19 @@ import {
   Modal,
 } from "react-native";
 
-export default function NavMenu({navOpen, setNavOpen}) {
+import { handleSignOut } from "../scripts/userAuth";
+
+export default function NavMenu({ navOpen, setNavOpen, user, setUser }) {
   // if (!navOpen) return null;
   // const [navOpen, setNavOpen] = useState(true);
+
+  const logOutPress = async () => {
+    const logOut = await handleSignOut();
+    if (logOut) {
+      setUser(false);
+      setNavOpen(!navOpen);
+    }
+  }
 
   return (
     <Modal
@@ -32,6 +42,9 @@ export default function NavMenu({navOpen, setNavOpen}) {
         </TouchableOpacity>
         <Text style={[styles.navText]}>Dashboard</Text>
         <Text style={[styles.navText]}>Settings</Text>
+        <Text style={[styles.navText]} onPress={() => logOutPress()}>
+          Log Out
+        </Text>
       </View>
     </Modal>
   );

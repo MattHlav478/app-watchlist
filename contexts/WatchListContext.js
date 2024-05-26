@@ -1,4 +1,9 @@
-import React, { createContext, useState, useEffect, useTransition } from "react";
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  useTransition,
+} from "react";
 import preloadedMovies from "./preloadedmovies";
 
 import { db, auth } from "../services/firebaseConnection";
@@ -24,13 +29,17 @@ export const WatchListProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchUserMovieList = async () => {
-      let userMovieList = (await getDoc(doc(db, "movies", user.email))).data()
-        .movies;
-      setWatchList(userMovieList || []);
+      if (user) {
+        let userMovieList = (await getDoc(doc(db, "movies", user.email))).data()
+          .movies;
+        setWatchList(userMovieList || []);
+      } else {
+        setWatchList([]); // Reset watchList when no user is signed in
+      }
     };
 
     fetchUserMovieList();
-  }, []);
+  }, [user]); // Add user as a dependency to re-run the effect when user changes
 
   // Function to add a movie to the watch list.
   const addToWatchList = (movie) => {
@@ -68,7 +77,13 @@ export const WatchListProvider = ({ children }) => {
   // This will allow any child component to access the watch list data and functions.
   return (
     <WatchListContext.Provider
-      value={{ watchList, setWatchList, addToWatchList, removeFromWatchList, isPending }}
+      value={{
+        watchList,
+        setWatchList,
+        addToWatchList,
+        removeFromWatchList,
+        isPending,
+      }}
     >
       {/* Rendering the children components passed to this Provider */}
       {children}

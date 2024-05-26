@@ -81,6 +81,7 @@ export default function App() {
         setUserInitial(user.email[0].toUpperCase());
       } else {
         console.log("No user is signed in");
+        setUserInitial(null);
       }
     });
 

@@ -63,32 +63,33 @@ export default function DetailsScreen({ route }) {
   }
 
   const handleSaveButtonClick = async () => {
+    const user = auth.currentUser;
+    let userMovieList = (await getDoc(doc(db, "movies", user.email))).data()
+      .movies;
     if (isSaved) {
       removeFromWatchList(movie.id);
+      console.log(`User's movie list: ${userMovieList}`);
+      await setDoc(doc(db, "movies", user.email), {
+        // remove movie title from movies array in firebase
+        movies: userMovieList.filter((title) => title !== movie.title),
+      });
+
       setIsSaved(false);
     } else {
       addToWatchList(movie);
 
-      // add to movie to firebase
-      console.log(`Movie to be saved: ${movie.title}`);
-
-      const user = auth.currentUser;
-      let userMovieList = (await getDoc(doc(db, "movies", user.email))).data()
-        .movies;
-      console.log(`User's movie list: ${userMovieList}`);
-      await setDoc(doc(db, "movies", user.email), {
-        // push new movie title to movies array in firebase
-        movies:
-          [...userMovieList,
-          movie.title],
-      });
-      await setDoc(doc(db, "users", user.email), {
-        timestamp: Date.now(),
-      });
-      await setDoc(doc(db, "test_messages", user.email), {
-        // to: (await getDoc(doc(db, "users", user.email))),
-        body: `You added ${movie.title} to your watchlist!`,
-      });
+      // console.log(`User's movie list: ${userMovieList}`);
+      // await setDoc(doc(db, "movies", user.email), {
+      //   // push new movie title to movies array in firebase
+      //   movies: [...userMovieList, movie.title],
+      // });
+      // await setDoc(doc(db, "users", user.email), {
+      //   timestamp: Date.now(),
+      // });
+      // await setDoc(doc(db, "test_messages", user.email), {
+      //   // to: (await getDoc(doc(db, "users", user.email))),
+      //   body: `You added ${movie.title} to your watchlist!`,
+      // });
 
       setIsSaved(true);
     }

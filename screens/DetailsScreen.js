@@ -69,10 +69,10 @@ export default function DetailsScreen({ route }) {
     if (isSaved) {
       removeFromWatchList(movie.id);
       console.log(`User's movie list: ${userMovieList}`);
-      await setDoc(doc(db, "movies", user.email), {
-        // remove movie title from movies array in firebase
-        movies: userMovieList.filter((title) => title !== movie.title),
-      });
+      // await setDoc(doc(db, "movies", user.email), {
+      //   // remove movie title from movies array in firebase
+      //   movies: userMovieList.filter((title) => title !== movie.title),
+      // });
 
       setIsSaved(false);
     } else {

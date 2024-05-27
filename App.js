@@ -1,5 +1,8 @@
 import React, { useState, useEffect, createContext } from "react";
-import { View, StyleSheet, Modal } from "react-native";
+import {
+  View,
+  StyleSheet,
+} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaView, StatusBar } from "react-native";
 import { createStackNavigator, Stack } from "@react-navigation/stack";
@@ -90,7 +93,6 @@ export default function App() {
   }, []);
 
   return (
-    
     <WatchListProvider>
       <UserFormContext.Provider value={{ userFormData, setUserFormData }}>
         <StatusBar barStyle="dark-content" />
@@ -167,7 +169,7 @@ function AuthStackScreen({ navigation, user, setUser }) {
         {(props) => (
           <SignInScreen
             {...props}
-            navigation={navigation}
+            // navigation={navigation}
             user={user}
             setUser={setUser}
             UserFormContext={UserFormContext}
@@ -178,7 +180,7 @@ function AuthStackScreen({ navigation, user, setUser }) {
         {(props) => (
           <SignupScreen
             {...props}
-            navigation={navigation}
+            // navigation={navigation}
             user={user}
             setUser={setUser}
             UserFormContext={UserFormContext}

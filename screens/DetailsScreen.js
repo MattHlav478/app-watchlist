@@ -49,9 +49,12 @@ export default function DetailsScreen({ route }) {
     fetchMovieDetails();
   }, [movieId]);
 
-  // Add this useEffect
   useEffect(() => {
-    setIsSaved(watchList.some((item) => item.id === movieId));
+    if (Array.isArray(watchList)) {
+      setIsSaved(watchList.some((item) => item.id === movieId));
+    } else {
+      console.error("watchList is not an array:", watchList);
+    }
   }, [watchList, movieId]);
 
   if (!movie) {

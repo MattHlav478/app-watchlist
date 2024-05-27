@@ -5,11 +5,18 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { handleSignIn } from "../scripts/userAuth";
 import { set } from "firebase/database";
 
-export default function SignInScreen({ navigation, user, setUser, UserFormContext }) {
+export default function SignInScreen({
+  navigation,
+  user,
+  setUser,
+  UserFormContext,
+}) {
   const { userFormData, setUserFormData } = useContext(UserFormContext);
   const [error, setError] = useState("");
 
@@ -26,36 +33,38 @@ export default function SignInScreen({ navigation, user, setUser, UserFormContex
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Sign In</Text>
-      <TextInput
-        style={styles.input}
-        textContentType="emailAddress"
-        placeholder="Email"
-        placeholderTextColor="#aaaaaa"
-        keyboardType="email-address"
-        onChangeText={(text) => handleInputChange("email", text)}
-        required
-      />
-      <TextInput
-        style={styles.input}
-        secureTextEntry={true}
-        placeholder="Password"
-        onChangeText={(text) => handleInputChange("password", text)}
-        required
-      />
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Submit</Text>
-      </TouchableOpacity>
-      <Text style={styles.text}>Not a member?</Text>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate("SignUp")}
-      >
-        <Text style={styles.buttonText}>Sign Up</Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Sign In</Text>
+        <TextInput
+          style={styles.input}
+          textContentType="emailAddress"
+          placeholder="Email"
+          placeholderTextColor="#aaaaaa"
+          keyboardType="email-address"
+          onChangeText={(text) => handleInputChange("email", text)}
+          required
+        />
+        <TextInput
+          style={styles.input}
+          secureTextEntry={true}
+          placeholder="Password"
+          onChangeText={(text) => handleInputChange("password", text)}
+          required
+        />
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Submit</Text>
+        </TouchableOpacity>
+        <Text style={styles.text}>Not a member?</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("SignUp")}
+        >
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 

@@ -30,9 +30,9 @@ export const WatchListProvider = ({ children }) => {
   useEffect(() => {
     const fetchUserMovieList = async () => {
       if (user) {
-        let userMovieList = (await getDoc(doc(db, "movies", user.email))).data()
-          .movies;
-        setWatchList(userMovieList || []);
+        let userMovieListData = (await getDoc(doc(db, "movies", user.email))).data();
+        let userMovieList = userMovieListData ? userMovieListData : [];
+        setWatchList(userMovieList);
       } else {
         setWatchList([]); // Reset watchList when no user is signed in
       }
@@ -50,10 +50,9 @@ export const WatchListProvider = ({ children }) => {
         setWatchList([...watchList, movie]);
         // console.log(`User's movie list: ${watchList}`);
         console.log(`movie info: ${movie}`);
-        setDoc(doc(db, "movies", user.email), {
-          // push new movie title to movies array in firebase
-          movies: [...watchList, movie],
-        });
+        
+
+
         setDoc(doc(db, "users", user.email), {
           timestamp: Date.now(),
         });

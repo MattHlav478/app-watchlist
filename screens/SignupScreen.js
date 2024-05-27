@@ -5,6 +5,8 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { handleSignUp } from "../scripts/userAuth";
 import { set } from "firebase/database";
@@ -16,10 +18,15 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 
-export default function SignupScreen({ user, setUser, navigation, UserFormContext }) {
+export default function SignupScreen({
+  user,
+  setUser,
+  navigation,
+  UserFormContext,
+}) {
   const { userFormData, setUserFormData } = useContext(UserFormContext);
   const { error, setError } = useState("");
-  
+
   const handleInputChange = (name, value) => {
     setUserFormData({ ...userFormData, [name]: value });
     // console.log(userFormData);
@@ -52,45 +59,47 @@ export default function SignupScreen({ user, setUser, navigation, UserFormContex
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
-      <TextInput
-        style={styles.input}
-        textContentType="emailAddress"
-        placeholder="Username"
-        placeholderTextColor="#aaaaaa"
-        keyboardType="default"
-        onChangeText={(text) => handleInputChange("username", text)}
-        required
-      />
-      <TextInput
-        style={styles.input}
-        textContentType="emailAddress"
-        placeholder="Email"
-        placeholderTextColor="#aaaaaa"
-        keyboardType="email-address"
-        onChangeText={(text) => handleInputChange("email", text)}
-        required
-      />
-      <TextInput
-        style={styles.input}
-        secureTextEntry={true}
-        placeholder="Password"
-        onChangeText={(text) => handleInputChange("password", text)}
-        required
-      />
-      {/* <TextInput
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Sign Up</Text>
+        <TextInput
+          style={styles.input}
+          textContentType="emailAddress"
+          placeholder="Username"
+          placeholderTextColor="#aaaaaa"
+          keyboardType="default"
+          onChangeText={(text) => handleInputChange("username", text)}
+          required
+        />
+        <TextInput
+          style={styles.input}
+          textContentType="emailAddress"
+          placeholder="Email"
+          placeholderTextColor="#aaaaaa"
+          keyboardType="email-address"
+          onChangeText={(text) => handleInputChange("email", text)}
+          required
+        />
+        <TextInput
+          style={styles.input}
+          secureTextEntry={true}
+          placeholder="Password"
+          onChangeText={(text) => handleInputChange("password", text)}
+          required
+        />
+        {/* <TextInput
         style={styles.input}
         value={password2}
         secureTextEntry={true}
         placeholder="Password"
         onChangeText={(text) => setPassword(text)} // Use onChangeText for React Native
       /> */}
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
-      <TouchableOpacity style={styles.button} onPress={handleFormSubmit}>
-        <Text style={styles.buttonText}>Submit</Text>
-      </TouchableOpacity>
-    </View>
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+        <TouchableOpacity style={styles.button} onPress={handleFormSubmit}>
+          <Text style={styles.buttonText}>Submit</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 

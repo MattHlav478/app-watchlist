@@ -82,38 +82,42 @@ export default function DetailsScreen({ route }) {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image
-          source={{
-            uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-          }}
-          style={styles.image}
-          resizeMode="contain"
-        />
-      </View>
-      <View style={styles.detailsContainer}>
-        <Text style={styles.title}>{movie.title}</Text>
-        <Text style={styles.releaseDate}>
-          Release Date: {movie.release_date}
+    <View style={styles.container}>
+      <TouchableOpacity
+        style={isSaved ? styles.removeButton : styles.saveButton}
+        onPress={handleSaveButtonClick}
+      >
+        <Text style={styles.saveButtonText}>
+          {isSaved ? "Remove from WatchList" : "Save to WatchList"}
         </Text>
-        <Text style={styles.overview}>{movie.overview}</Text>
-        <TouchableOpacity
-          style={isSaved ? styles.removeButton : styles.saveButton}
-          onPress={handleSaveButtonClick}
-        >
-          <Text style={styles.saveButtonText}>
-            {isSaved ? "Remove from WatchList" : "Save to WatchList"}
+      </TouchableOpacity>
+      <ScrollView>
+        <View style={styles.imageContainer}>
+          <Image
+            source={{
+              uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+            }}
+            style={styles.image}
+            resizeMode="contain"
+          />
+        </View>
+        <View style={styles.detailsContainer}>
+          <Text style={styles.title}>{movie.title}</Text>
+          <Text style={styles.releaseDate}>
+            Release Date: {movie.release_date}
           </Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+          <Text style={styles.overview}>{movie.overview}</Text>
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
     backgroundColor: "#1c1c2b",
   },
   loadingText: {
@@ -149,17 +153,34 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 20,
   },
+  // buttonView: {
+  //   flex: 1,
+  //   flexDirection: "column",
+  //   justifyContent: "center",
+  //   alignSelf: "center",
+  //   marginTop: 50,
+  //   marginBottom: 10,
+  //   width: "70%",
+  // },
   saveButton: {
     backgroundColor: "#00adb5",
     padding: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    alignSelf: "center",
     alignItems: "center",
     borderRadius: 10,
+    width: "70%",
   },
   removeButton: {
     backgroundColor: "#ff4757",
     padding: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    alignSelf: "center",
     alignItems: "center",
     borderRadius: 10,
+    width: "70%",
   },
   saveButtonText: {
     color: "#ffffff",

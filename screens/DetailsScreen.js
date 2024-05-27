@@ -74,7 +74,6 @@ export default function DetailsScreen({ route }) {
     if (isSaved) {
       removeFromWatchList(movie.id);
       console.log(`User's movie list: ${userMovieList}`);
-
       setIsSaved(false);
     } else {
       addToWatchList(movie);

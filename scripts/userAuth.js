@@ -29,17 +29,18 @@ export const handleSignUp = async (email, password) => {
 export const handleSignIn = async (email, password) => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
+    // After signing in, save the sign-in status to AsyncStorage
+    try {
+      const idToken = await auth.currentUser.getIdToken();
+      await AsyncStorage.setItem("firebaseAuthToken", idToken);
+      await AsyncStorage.setItem("email", email);
+      await AsyncStorage.setItem("password", password);
+    } catch (error) {
+      // Error saving data
+    }
+    return { error: null }; // Add this line
   } catch (error) {
     return { error: error.message };
-  }
-  // After signing in, save the sign-in status to AsyncStorage
-  try {
-    const idToken = await auth.currentUser.getIdToken();
-    await AsyncStorage.setItem("firebaseAuthToken", idToken);
-    await AsyncStorage.setItem("email", email);
-    await AsyncStorage.setItem("password", password);
-  } catch (error) {
-    // Error saving data
   }
 };
 

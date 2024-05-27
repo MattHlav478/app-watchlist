@@ -48,6 +48,10 @@ export const WatchListProvider = ({ children }) => {
     if (!alreadyExists) {
       // If the movie doesn't exist, add it to the current watch list and update the state.
       setWatchList([...watchList, movie]);
+      setDoc(doc(db, "movies", user.email), {
+        // push new movie title to movies array in firebase
+        movies: [...watchList, movie],
+      });
       setDoc(doc(db, "users", user.email), {
         timestamp: Date.now(),
       });

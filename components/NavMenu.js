@@ -8,9 +8,14 @@ import {
   Modal,
 } from "react-native";
 
-export default function NavMenu({navOpen, setNavOpen}) {
-  // if (!navOpen) return null;
-  // const [navOpen, setNavOpen] = useState(true);
+import { handleSignOut } from "../scripts/userAuth";
+
+export default function NavMenu({ navOpen, setNavOpen, setUser }) {
+  const handleLogOut = () => {
+    setUser(false);
+    setNavOpen(!navOpen);
+    handleSignOut();
+  };
 
   return (
     <Modal
@@ -32,6 +37,9 @@ export default function NavMenu({navOpen, setNavOpen}) {
         </TouchableOpacity>
         <Text style={[styles.navText]}>Dashboard</Text>
         <Text style={[styles.navText]}>Settings</Text>
+        <Text style={[styles.logoutButton]} onPress={handleLogOut}>
+          Log Out
+        </Text>
       </View>
     </Modal>
   );
@@ -56,5 +64,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "white",
     padding: 16,
+  },
+  logoutButton: {
+    fontSize: 18,
+    color: "white",
+    padding: 16,
+    backgroundColor: "white",
+    color: "#1c1c2b",
   },
 });

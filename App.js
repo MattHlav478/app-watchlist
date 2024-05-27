@@ -99,7 +99,7 @@ export default function App() {
         <NavigationContainer>
           {user ? (
             <View style={styles.appContainer}>
-              <Header userInitial={userInitial} />
+              <Header userInitial={userInitial} setUser={setUser} />
               <Tab.Navigator
                 screenOptions={{
                   headerShown: false,

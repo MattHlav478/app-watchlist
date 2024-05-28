@@ -52,7 +52,7 @@ export const WatchListProvider = ({ children }) => {
         // push new movie title to movies array in firebase
         movies: [...watchList, movie],
       });
-      setDoc(doc(db, "users", user.email), {
+      setDoc(doc(db, "users", user.uid), {
         timestamp: Date.now(),
       });
       setDoc(doc(db, "test_messages", user.email), {

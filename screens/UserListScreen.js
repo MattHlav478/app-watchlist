@@ -100,7 +100,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#1c1c2b",
-    paddingTop: 60,
   },
   emptyText: {
     color: "#ffffff",

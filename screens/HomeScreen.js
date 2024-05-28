@@ -1,63 +1,63 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import MovieCarousel from '../components/MovieCarousel';
-import SearchDropdown from '../components/SearchDropdown';
-import { fetchMoviesByCategory } from '../services/api';
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, ScrollView } from "react-native";
+import MovieCarousel from "../components/MovieCarousel";
+import SearchDropdown from "../components/SearchDropdown";
+import { fetchMoviesByCategory } from "../services/api";
 
 export default function HomeScreen({ navigation }) {
   const [categories, setCategories] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   const fetchMovies = async () => {
     const categories = [
       {
         id: 28,
-        name: 'Action',
+        name: "Action",
       },
       {
         id: 35,
-        name: 'Comedy',
+        name: "Comedy",
       },
       {
         id: 18,
-        name: 'Drama',
+        name: "Drama",
       },
       {
         id: 10751,
-        name: 'Family',
+        name: "Family",
       },
       {
         id: 14,
-        name: 'Fantasy',
+        name: "Fantasy",
       },
       {
         id: 27,
-        name: 'Horror',
+        name: "Horror",
       },
       {
         id: 9648,
-        name: 'Mystery',
+        name: "Mystery",
       },
       {
         id: 10749,
-        name: 'Romance',
+        name: "Romance",
       },
       {
         id: 878,
-        name: 'Science Fiction',
+        name: "Science Fiction",
       },
       {
         id: 53,
-        name: 'Thriller',
+        name: "Thriller",
       },
       {
         id: 10752,
-        name: 'War',
+        name: "War",
       },
       {
         id: 37,
-        name: 'Western',
+        name: "Western",
       },
     ];
 
@@ -66,7 +66,7 @@ export default function HomeScreen({ navigation }) {
       return {
         ...category,
         // Get the 10 most recent movies and sort by popularity
-        movies: movies.sort((a, b) => b.popularity - a.popularity).slice(0, 10)
+        movies: movies.sort((a, b) => b.popularity - a.popularity).slice(0, 10),
       };
     });
 
@@ -74,7 +74,7 @@ export default function HomeScreen({ navigation }) {
       const results = await Promise.all(promises);
       setCategories(results);
     } catch (error) {
-      console.error('Error fetching movies:', error);
+      console.error("Error fetching movies:", error);
     }
   };
 
@@ -91,7 +91,7 @@ export default function HomeScreen({ navigation }) {
         setSearchResults={setSearchResults}
         navigation={navigation}
       />
-      <ScrollView>
+      <ScrollView style={styles.carouselsContainer}>
         {categories.map((category) => (
           <MovieCarousel
             key={category.id}
@@ -108,7 +108,9 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1c1c2b',
-    paddingTop: 20,
+    backgroundColor: "transparent",
+  },
+  carouselsContainer: {
+    backgroundColor: "#1c1c2b",
   },
 });

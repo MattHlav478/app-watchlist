@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
-} from 'react-native';
-import { searchMovies } from '../services/api';
+} from "react-native";
+import { searchMovies } from "../services/api";
 
 const SearchDropdown = ({
   searchQuery,
@@ -29,9 +29,9 @@ const SearchDropdown = ({
   };
 
   const handleSelectMovie = (movieId) => {
-    setSearchQuery('');
+    setSearchQuery("");
     setSearchResults([]);
-    navigation.navigate('Details', { movieId });
+    navigation.navigate("Details", { movieId });
   };
 
   return (
@@ -70,26 +70,26 @@ const SearchDropdown = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 20,
+    backgroundColor: "#1c1c2b",
   },
   input: {
-    color: '#fff',
-    backgroundColor: '#2e2e38',
+    color: "#fff",
+    backgroundColor: "#2e2e38",
     borderRadius: 5,
-    marginTop: 8,
+    marginTop: 5,
+    marginBottom: 5,
     marginHorizontal: 20,
     paddingLeft: 10,
     paddingRight: 10,
     height: 40,
     fontSize: 16,
-    marginBottom: 10,
   },
   searchResult: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#444',
+    borderBottomColor: "#444",
   },
   poster: {
     width: 50,
@@ -97,12 +97,12 @@ const styles = StyleSheet.create({
   },
   title: {
     flex: 1,
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
     paddingLeft: 10,
   },
   year: {
-    color: '#aaa',
+    color: "#aaa",
   },
 });
 

@@ -83,14 +83,6 @@ export default function DetailsScreen({ route }) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={isSaved ? styles.removeButton : styles.saveButton}
-        onPress={handleSaveButtonClick}
-      >
-        <Text style={styles.saveButtonText}>
-          {isSaved ? "Remove from WatchList" : "Save to WatchList"}
-        </Text>
-      </TouchableOpacity>
       <ScrollView>
         <View style={styles.imageContainer}>
           <Image
@@ -109,6 +101,14 @@ export default function DetailsScreen({ route }) {
           <Text style={styles.overview}>{movie.overview}</Text>
         </View>
       </ScrollView>
+      <TouchableOpacity
+        style={isSaved ? styles.removeButton : styles.saveButton}
+        onPress={handleSaveButtonClick}
+      >
+        <Text style={styles.saveButtonText}>
+          {isSaved ? "Remove from WatchList" : "Save to WatchList"}
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }

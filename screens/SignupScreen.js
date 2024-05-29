@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -18,6 +18,8 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 
+import CustomModal from "../components/CustomModal";
+
 export default function SignupScreen({
   user,
   setUser,
@@ -25,7 +27,11 @@ export default function SignupScreen({
   UserFormContext,
 }) {
   const { userFormData, setUserFormData } = useContext(UserFormContext);
-  const { error, setError } = useState("");
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setUserFormData({ email: "", password: "" });
+  }, []);
 
   const handleInputChange = (name, value) => {
     setUserFormData({ ...userFormData, [name]: value });
@@ -54,7 +60,7 @@ export default function SignupScreen({
       });
     } catch (error) {
       console.error(`sign up error: ${error.code}`);
-      setError(error.message);
+      setError(error.code);
     }
   };
 
@@ -62,7 +68,7 @@ export default function SignupScreen({
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <Text style={styles.title}>Sign Up</Text>
-        <TextInput
+        {/* <TextInput
           style={styles.input}
           textContentType="emailAddress"
           placeholder="Username"
@@ -70,7 +76,7 @@ export default function SignupScreen({
           keyboardType="default"
           onChangeText={(text) => handleInputChange("username", text)}
           required
-        />
+        /> */}
         <TextInput
           style={styles.input}
           textContentType="emailAddress"
@@ -80,6 +86,15 @@ export default function SignupScreen({
           onChangeText={(text) => handleInputChange("email", text)}
           required
         />
+        {error === "auth/email-already-in-use" ? (
+          <Text style={styles.errorText}>Email already in use</Text>
+        ) : null}
+        {error === "auth/missing-email" ? (
+          <Text style={styles.errorText}>Email is required</Text>
+        ) : null}
+        {error === "auth/invalid-email" ? (
+          <Text style={styles.errorText}>Invalid email</Text>
+        ) : null}
         <TextInput
           style={styles.input}
           secureTextEntry={true}
@@ -87,16 +102,22 @@ export default function SignupScreen({
           onChangeText={(text) => handleInputChange("password", text)}
           required
         />
-        {/* <TextInput
-        style={styles.input}
-        value={password2}
-        secureTextEntry={true}
-        placeholder="Password"
-        onChangeText={(text) => setPassword(text)} // Use onChangeText for React Native
-      /> */}
-        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+        {error === "auth/weak-password" ? (
+          <Text style={styles.errorText}>
+            Password must be at least 6 characters
+          </Text>
+        ) : null}
         <TouchableOpacity style={styles.button} onPress={handleFormSubmit}>
-          <Text style={styles.buttonText}>Submit</Text>
+          <View>
+            <Text style={styles.buttonText}>Submit</Text>
+          </View>
+        </TouchableOpacity>
+        <Text style={styles.text}>Already a member?</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("SignIn")}
+        >
+          <Text style={styles.buttonText}>Sign In</Text>
         </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>

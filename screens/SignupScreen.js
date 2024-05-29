@@ -53,7 +53,7 @@ export default function SignupScreen({
         }
       });
     } catch (error) {
-      console.error(error);
+      console.error(`sign up error: ${error.code}`);
       setError(error.message);
     }
   };

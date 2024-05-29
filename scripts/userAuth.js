@@ -22,7 +22,16 @@ export const handleSignUp = async (email, password) => {
     });
     return true;
   } catch (error) {
-    return { error: error.message };
+    // console.log(error.code)
+    if (error.code === "auth/email-already-in-use") {
+      return { error: "Email already in use" };
+    } else if (error.code === "auth/weak-password") {
+      return { error: "Password is too weak" };
+    } else if (error.code === "auth/invalid-email") {
+      return { error: "Invalid email" };
+    }
+    // return { error: error.message };
+    return error;
   }
 };
 
@@ -47,6 +56,9 @@ export const handleSignIn = async (email, password) => {
 export const handleSignOut = async () => {
   try {
     await signOut(auth);
+    await AsyncStorage.removeItem("firebaseAuthToken");
+    await AsyncStorage.removeItem("email");
+    await AsyncStorage.removeItem("password");
     return true;
   } catch (error) {
     return false;

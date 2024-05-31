@@ -11,7 +11,11 @@ import {
 
 import { handleSignOut, handlePasswordReset } from "../scripts/userAuth";
 
-export default function CustomModal({ setModalOpen, handleInputChange, userFormData }) {
+export default function CustomModal({
+  setModalOpen,
+  handleInputChange,
+  userFormData,
+}) {
   return (
     <Modal
       animationType="slide"
@@ -36,16 +40,24 @@ export default function CustomModal({ setModalOpen, handleInputChange, userFormD
           placeholderTextColor="#aaaaaa"
           keyboardType="email-address"
           onChangeText={(text) => handleInputChange("email", text)}
-          onPress={() => handlePasswordReset(userFormData.email)}
           required
         />
-              <TouchableOpacity
-          onPress={() => {
-            setModalOpen(false);
-          }}
-        >
-          <Text style={[styles.navText]}>Submit</Text>
-        </TouchableOpacity>
+        <View style={styles.buttonView}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() =>
+              handlePasswordReset(userFormData.email) && setModalOpen(false)
+            }
+          >
+            <Text style={[styles.buttonText]}>Submit</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => setModalOpen(false)}
+          >
+            <Text style={[styles.buttonText]}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </Modal>
   );
@@ -66,13 +78,34 @@ const styles = StyleSheet.create({
     justifyContent: "center", // Center the content vertically
     alignItems: "center", // Center the content horizontally
   },
-  navText: {
+  buttonView: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "90%",
+    // backgroundColor: "red",
+  },
+  button: {
+    backgroundColor: "#00adb5",
+    borderRadius: 5,
+    marginTop: 10,
+    // marginHorizontal: 10,
+    width: "40%",
+  },
+  closeButton: {
+    backgroundColor: "#393e46",
+    borderRadius: 5,
+    marginTop: 10,
+    // marginHorizontal: 10,
+    width: "40%",
+  },
+  buttonText: {
     fontSize: 18,
     color: "white",
     padding: 16,
+    textAlign: "center",
   },
   input: {
-    width: "100%",
+    width: "80%",
     height: 50,
     backgroundColor: "white",
     borderRadius: 5,

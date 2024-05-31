@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { getFirestore, addDoc, collection } from "firebase/firestore";
 import { auth, db } from "../services/firebaseConnection";
@@ -63,6 +64,15 @@ export const handleSignOut = async () => {
   try {
     await signOut(auth);
     await AsyncStorage.clear();
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const handlePasswordReset = async (email) => {
+  try {
+    await sendPasswordResetEmail(auth, email);
     return true;
   } catch (error) {
     return false;

@@ -94,8 +94,13 @@ export default function SignInScreen({
         >
           <Text style={styles.buttonText}>Forgot Password?</Text>
         </TouchableOpacity>
-        {modalOpen && <CustomModal setModalOpen={setModalOpen}  />}
-        
+        {modalOpen && (
+          <CustomModal
+            setModalOpen={setModalOpen}
+            userFormData={userFormData}
+            handleInputChange={handleInputChange}
+          />
+        )}
       </View>
     </TouchableWithoutFeedback>
   );

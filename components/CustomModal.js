@@ -9,9 +9,9 @@ import {
   Modal,
 } from "react-native";
 
-import { handleSignOut } from "../scripts/userAuth";
+import { handleSignOut, handlePasswordReset } from "../scripts/userAuth";
 
-export default function CustomModal({ setModalOpen, children }) {
+export default function CustomModal({ setModalOpen, handleInputChange, userFormData }) {
   return (
     <Modal
       animationType="slide"
@@ -36,8 +36,16 @@ export default function CustomModal({ setModalOpen, children }) {
           placeholderTextColor="#aaaaaa"
           keyboardType="email-address"
           onChangeText={(text) => handleInputChange("email", text)}
+          onPress={() => handlePasswordReset(userFormData.email)}
           required
         />
+              <TouchableOpacity
+          onPress={() => {
+            setModalOpen(false);
+          }}
+        >
+          <Text style={[styles.navText]}>Submit</Text>
+        </TouchableOpacity>
       </View>
     </Modal>
   );

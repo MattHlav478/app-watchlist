@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -10,6 +10,8 @@ import {
 } from "react-native";
 import { handleSignIn } from "../scripts/userAuth";
 import { set } from "firebase/database";
+import { auth, db } from "../services/firebaseConnection";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SignInScreen({
   navigation,
@@ -20,16 +22,37 @@ export default function SignInScreen({
   const { userFormData, setUserFormData } = useContext(UserFormContext);
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    if (AsyncStorage.getItem("email") && AsyncStorage.getItem("password")) {
+      setUserFormData({
+        email: AsyncStorage.getItem("email"),
+        password: AsyncStorage.getItem("password"),
+      });
+    } else {
+      setUserFormData({ email: "", password: "" });
+    }
+  }, []);
+
   const handleInputChange = (name, value) => {
     setUserFormData({ ...userFormData, [name]: value });
     // console.log(userFormData);
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const res = await handleSignIn(userFormData.email, userFormData.password);
-    setUser(true);
-    if (res.error) setError(res.error);
+    // e.preventDefault();
+    try {
+      await handleSignIn(userFormData.email, userFormData.password);
+      // After sign-in is successful, navigate to another screen
+      auth.onAuthStateChanged(function (user) {
+        if (user) {
+          // console.log(`User: ${user.email} signed in successfully!`);
+          setUser(true);
+        }
+      });
+    } catch (error) {
+      console.error(`sign in error: ${error}`);
+      // setError(error.code);
+    }
   };
 
   return (

@@ -16,7 +16,7 @@ import { WatchListContext } from "../contexts/WatchListContext";
 export default function UserListScreen({ navigation }) {
   // Accessing the watchList and removeFromWatchList function from the WatchListContext.
   const { watchList, removeFromWatchList } = useContext(WatchListContext);
-  
+
   // Local state to handle filtered version of the watch list.
   const [filteredWatchList, setFilteredWatchList] = useState(watchList);
 
@@ -54,10 +54,6 @@ export default function UserListScreen({ navigation }) {
   useEffect(() => {
     // Set the filtered watch list to match the updated watch list.
     // setFilteredWatchList(watchList);
-
-    // Logging to the console for debugging purposes (should be removed in production).
-    console.log(watchList);
-    // Note: filterWatchList is a function. If you wanted to log its result, you should call it.
   }, []);
 
   // The main render return for the component.

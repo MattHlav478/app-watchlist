@@ -30,7 +30,6 @@ export default function NavMenu({ navOpen, setNavOpen, setUser }) {
         <TouchableOpacity
           onPress={() => {
             setNavOpen(!navOpen);
-            console.log("X clicked");
           }}
         >
           <Text style={[styles.navText]}>X</Text>

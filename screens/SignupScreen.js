@@ -107,6 +107,9 @@ export default function SignupScreen({
             Password must be at least 6 characters
           </Text>
         ) : null}
+        {error === "auth/missing-password" ? (
+          <Text style={styles.errorText}>Password is required to sign up</Text>
+        ) : null}
         <TouchableOpacity style={styles.button} onPress={handleFormSubmit}>
           <View>
             <Text style={styles.buttonText}>Submit</Text>

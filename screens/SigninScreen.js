@@ -12,6 +12,7 @@ import { handleSignIn } from "../scripts/userAuth";
 import { set } from "firebase/database";
 import { auth, db } from "../services/firebaseConnection";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CustomModal from "../components/CustomModal";
 
 export default function SignInScreen({
   navigation,
@@ -21,6 +22,7 @@ export default function SignInScreen({
 }) {
   const { userFormData, setUserFormData } = useContext(UserFormContext);
   const [error, setError] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     if (AsyncStorage.getItem("email") && AsyncStorage.getItem("password")) {
@@ -86,6 +88,14 @@ export default function SignInScreen({
         >
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.forgotButton}
+          onPress={() => setModalOpen(true)}
+        >
+          <Text style={styles.buttonText}>Forgot Password?</Text>
+        </TouchableOpacity>
+        {modalOpen && <CustomModal setModalOpen={setModalOpen}  />}
+        
       </View>
     </TouchableWithoutFeedback>
   );
@@ -126,6 +136,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 5,
     marginTop: 10,
+  },
+  forgotButton: {
+    width: "50%",
+    height: 50,
+    backgroundColor: "#393e46",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 5,
+    marginTop: 40,
   },
   buttonText: {
     fontSize: 18,

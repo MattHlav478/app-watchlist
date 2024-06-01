@@ -7,12 +7,14 @@ import {
   TouchableOpacity,
   Keyboard,
   TouchableWithoutFeedback,
+  Modal,
 } from "react-native";
 import { handleSignIn } from "../scripts/userAuth";
 import { set } from "firebase/database";
 import { auth, db } from "../services/firebaseConnection";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomModal from "../components/CustomModal";
+import OptionModal from "../components/OptionModal";
 
 export default function SignInScreen({
   navigation,
@@ -94,12 +96,46 @@ export default function SignInScreen({
         >
           <Text style={styles.buttonText}>Forgot Password?</Text>
         </TouchableOpacity>
+
         {modalOpen && (
-          <CustomModal
+          <OptionModal
             setModalOpen={setModalOpen}
             userFormData={userFormData}
             handleInputChange={handleInputChange}
-          />
+          >
+            <TouchableOpacity
+              onPress={() => {
+                setModalOpen(false);
+              }}
+            >
+              <Text>X</Text>
+            </TouchableOpacity>
+            <TextInput
+              style={styles.pwResetInput}
+              textContentType="emailAddress"
+              placeholder="Email"
+              placeholderTextColor="#aaaaaa"
+              keyboardType="email-address"
+              onChangeText={(text) => handleInputChange("email", text)}
+              required
+            />
+            <View style={styles.buttonView}>
+              <TouchableOpacity
+                style={styles.resetButton}
+                onPress={() =>
+                  handlePasswordReset(userFormData.email) && setModalOpen(false)
+                }
+              >
+                <Text style={[styles.buttonText]}>Submit</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setModalOpen(false)}
+              >
+                <Text style={[styles.buttonText]}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </OptionModal>
         )}
       </View>
     </TouchableWithoutFeedback>
@@ -158,6 +194,40 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 14,
     color: "red",
+    marginBottom: 10,
+  },
+  buttonView: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "90%",
+    // backgroundColor: "red",
+  },
+  resetButton: {
+    backgroundColor: "#00adb5",
+    borderRadius: 5,
+    marginTop: 10,
+    // marginHorizontal: 10,
+    width: "40%",
+  },
+  closeButton: {
+    backgroundColor: "#393e46",
+    borderRadius: 5,
+    marginTop: 10,
+    // marginHorizontal: 10,
+    width: "40%",
+  },
+  buttonText: {
+    fontSize: 18,
+    color: "white",
+    padding: 16,
+    textAlign: "center",
+  },
+  pwResetInput: {
+    width: "80%",
+    height: 50,
+    backgroundColor: "white",
+    borderRadius: 5,
+    padding: 10,
     marginBottom: 10,
   },
 });

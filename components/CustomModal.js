@@ -64,7 +64,7 @@ export default function CustomModal({
 }
 
 const styles = StyleSheet.create({
-  navPanel: {
+  modalContainer: {
     // position: "absolute",
     flex: 1,
     zIndex: 100,
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     width: "90%",
     // backgroundColor: "red",
   },
-  button: {
+  resetButton: {
     backgroundColor: "#00adb5",
     borderRadius: 5,
     marginTop: 10,
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     padding: 16,
     textAlign: "center",
   },
-  input: {
+  pwResetInput: {
     width: "80%",
     height: 50,
     backgroundColor: "white",

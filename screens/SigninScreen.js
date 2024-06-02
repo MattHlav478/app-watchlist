@@ -99,9 +99,9 @@ export default function SignInScreen({
 
         {modalOpen && (
           <OptionModal
-            setModalOpen={setModalOpen}
-            userFormData={userFormData}
-            handleInputChange={handleInputChange}
+            // setModalOpen={setModalOpen}
+            // userFormData={userFormData}
+            // handleInputChange={handleInputChange}
           >
             <TouchableOpacity
               onPress={() => {

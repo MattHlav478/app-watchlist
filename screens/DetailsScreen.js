@@ -22,9 +22,12 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 
+import OptionModal from "../components/OptionModal";
+
 export default function DetailsScreen({ route }) {
   const [movie, setMovie] = useState(null);
-  const [isSaved, setIsSaved] = useState(false); // Add this line
+  const [isSaved, setIsSaved] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const movieId = route.params.movieId;
   const { addToWatchList, removeFromWatchList, watchList } = useContext(
     WatchListContext
@@ -109,6 +112,14 @@ export default function DetailsScreen({ route }) {
           {isSaved ? "Remove from WatchList" : "Save to WatchList"}
         </Text>
       </TouchableOpacity>
+      {modalOpen && (
+        <OptionModal
+          setModalOpen={setModalOpen}
+          movie={movie}
+          isSaved={isSaved}
+        />
+      )
+      }
     </View>
   );
 }

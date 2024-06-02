@@ -202,7 +202,14 @@ function AuthStackScreen({ navigation, user, setUser }) {
 
 function HomeStackScreen() {
   return (
-    <HomeStack.Navigator screenOptions={{ headerShown: false }}>
+    <HomeStack.Navigator
+      screenOptions={{
+        headerShown: false,
+        background: "ffffff",
+        tabBarActiveTintColor: "ffffff",
+        tabBarInactiveTintColor: "ffffff",
+      }}
+    >
       <HomeStack.Screen name="Home" component={HomeScreen} />
       <HomeStack.Screen name="Details" component={DetailsScreen} />
     </HomeStack.Navigator>
@@ -214,9 +221,9 @@ function UserListStackScreen() {
     <UserListStack.Navigator
       screenOptions={{
         headerShown: false,
-        background: "blue",
-        tabBarActiveTintColor: "#1c1c2b",
-        tabBarInactiveTintColor: "gray",
+        background: "#ffffff",
+        tabBarActiveTintColor: "ffffff",
+        tabBarInactiveTintColor: "ffffff",
       }}
     >
       <UserListStack.Screen
@@ -233,9 +240,9 @@ function DashboardStackScreen() {
     <DashboardStack.Navigator
       screenOptions={{
         headerShown: false,
-        background: "blue",
-        tabBarActiveTintColor: "#1c1c2b",
-        tabBarInactiveTintColor: "gray",
+        background: "ffffff",
+        tabBarActiveTintColor: "ffffff",
+        tabBarInactiveTintColor: "ffffff",
       }}
     >
       <DashboardStack.Screen name="Dashboard" component={DashboardScreen} />

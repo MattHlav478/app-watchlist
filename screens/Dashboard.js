@@ -23,23 +23,37 @@ import {
 
 export default function Dashboard({}) {
   return (
-    <View>
+    <View style={styles.container}>
       <Text style={styles.title}>Dashboard</Text>
-          <View>
-              <Text>User Email:</Text>
-              <Text>Sign Up Date:</Text>
-              <Text>Lists:</Text>
-          </View>
+      <View style={styles.infoContainer}>
+        <Text style={styles.text}>User Email:</Text>
+        <Text style={styles.text}>Sign Up Date:</Text>
+        <Text style={styles.text}>Lists:</Text>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    backgroundColor: "#1c1c2b",
+    color: "#ffffff",
+  },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
     marginVertical: 10,
-    color: "#fff",
+    color: "#ffffff",
   },
+  infoContainer: {
+    marginHorizontal: 20,
+  },
+  text: {
+    color: "#ffffff",
+    fontSize: 16,
+  }
 });

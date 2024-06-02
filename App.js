@@ -1,8 +1,5 @@
 import React, { useState, useEffect, createContext } from "react";
-import {
-  View,
-  StyleSheet,
-} from "react-native";
+import { View, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaView, StatusBar } from "react-native";
 import { createStackNavigator, Stack } from "@react-navigation/stack";
@@ -16,6 +13,7 @@ import SignupScreen from "./screens/SignupScreen";
 import HomeScreen from "./screens/HomeScreen";
 import UserListScreen from "./screens/UserListScreen";
 import DetailsScreen from "./screens/DetailsScreen";
+import DashboardScreen from "./screens/Dashboard";
 
 // import components
 import Header from "./components/Header";
@@ -34,6 +32,7 @@ import { set } from "firebase/database";
 const AuthStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const UserListStack = createStackNavigator();
+const DashboardStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export const UserFormContext = React.createContext();
@@ -141,6 +140,20 @@ export default function App() {
                     ),
                   }}
                 />
+                <Tab.Screen
+                  name="Dashboard"
+                  component={DashboardScreen}
+                  options={{
+                    tabBarLabel: "",
+                    tabBarIcon: ({ color, size }) => (
+                      <MaterialCommunityIcons
+                        name="account-cog"
+                        color={color}
+                        size={size}
+                      />
+                    ),
+                  }}
+                />
               </Tab.Navigator>
             </View>
           ) : (
@@ -212,5 +225,20 @@ function UserListStackScreen() {
       />
       <UserListStack.Screen name="Details" component={DetailsScreen} />
     </UserListStack.Navigator>
+  );
+}
+
+function DashboardStackScreen() {
+  return (
+    <DashboardStack.Navigator
+      screenOptions={{
+        headerShown: false,
+        background: "blue",
+        tabBarActiveTintColor: "#1c1c2b",
+        tabBarInactiveTintColor: "gray",
+      }}
+    >
+      <DashboardStack.Screen name="Dashboard" component={DashboardScreen} />
+    </DashboardStack.Navigator>
   );
 }

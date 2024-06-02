@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { useContext } from "react";
 import { WatchListContext } from "../contexts/WatchListContext";
 
 import { db, auth } from "../services/firebaseConnection";

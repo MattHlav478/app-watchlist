@@ -103,13 +103,6 @@ export default function SignInScreen({
             // userFormData={userFormData}
             // handleInputChange={handleInputChange}
           >
-            <TouchableOpacity
-              onPress={() => {
-                setModalOpen(false);
-              }}
-            >
-              <Text>X</Text>
-            </TouchableOpacity>
             <TextInput
               style={styles.pwResetInput}
               textContentType="emailAddress"

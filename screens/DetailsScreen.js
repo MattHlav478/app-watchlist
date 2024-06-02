@@ -73,14 +73,18 @@ export default function DetailsScreen({ route }) {
       await getDoc(doc(db, "movies", user.email))
     ).data();
     let userMovieList = userMovieListData ? userMovieListData.movies : [];
-    if (isSaved) {
-      removeFromWatchList(movie.id);
-      console.log(`User's movie list: ${userMovieList}`);
-      setIsSaved(false);
-    } else {
-      addToWatchList(movie);
-      setIsSaved(true);
-    }
+    addToWatchList(movie);
+    setIsSaved(true);
+  };
+
+  const handleRemoveButtonClick = async () => {
+    const user = auth.currentUser;
+    let userMovieListData = (
+      await getDoc(doc(db, "movies", user.email))
+    ).data();
+    let userMovieList = userMovieListData ? userMovieListData.movies : [];
+    removeFromWatchList(movie.id);
+    setIsSaved(false);
   };
 
   return (
@@ -103,22 +107,52 @@ export default function DetailsScreen({ route }) {
           <Text style={styles.overview}>{movie.overview}</Text>
         </View>
       </ScrollView>
-      <TouchableOpacity
-        style={isSaved ? styles.removeButton : styles.saveButton}
-        onPress={handleSaveButtonClick}
-      >
-        <Text style={styles.saveButtonText}>
-          {isSaved ? "Remove from WatchList" : "Save to WatchList"}
-        </Text>
-      </TouchableOpacity>
+
+      {isSaved ? (
+        <TouchableOpacity
+          style={styles.removeButton}
+          onPress={handleRemoveButtonClick}
+        >
+          <Text style={styles.saveButtonText}>
+            {isSaved ? "Remove from WatchList" : "Save to WatchList"}
+          </Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          style={styles.saveButton}
+          onPress={() => setModalOpen(true)}
+        >
+          <Text style={styles.saveButtonText}>
+            {isSaved ? "Remove from WatchList" : "Save to WatchList"}
+          </Text>
+        </TouchableOpacity>
+      )}
+
       {modalOpen && (
         <OptionModal
           setModalOpen={setModalOpen}
           movie={movie}
           isSaved={isSaved}
-        />
-      )
-      }
+        >
+          <Text>Select List:</Text>
+          <View style={styles.buttonView}>
+            <TouchableOpacity
+              style={styles.modalSaveButton}
+              onPress={() =>
+                handleSaveButtonClick() && setModalOpen(false)
+              }
+            >
+              <Text style={[styles.buttonText]}>Save</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalOpen(false)}
+            >
+              <Text style={[styles.buttonText]}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </OptionModal>
+      )}
     </View>
   );
 }
@@ -163,15 +197,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 20,
   },
-  // buttonView: {
-  //   flex: 1,
-  //   flexDirection: "column",
-  //   justifyContent: "center",
-  //   alignSelf: "center",
-  //   marginTop: 50,
-  //   marginBottom: 10,
-  //   width: "70%",
-  // },
   saveButton: {
     backgroundColor: "#00adb5",
     padding: 10,
@@ -196,4 +221,32 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontSize: 18,
   },
+  // BEGIN Modal styles
+  buttonView: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "90%",
+    // backgroundColor: "red",
+  },
+  modalSaveButton: {
+    backgroundColor: "#00adb5",
+    borderRadius: 5,
+    marginTop: 10,
+    // marginHorizontal: 10,
+    width: "40%",
+  },
+  closeButton: {
+    backgroundColor: "#393e46",
+    borderRadius: 5,
+    marginTop: 10,
+    // marginHorizontal: 10,
+    width: "40%",
+  },
+  buttonText: {
+    fontSize: 18,
+    color: "white",
+    padding: 16,
+    textAlign: "center",
+  },
+  // END Modal styles
 });

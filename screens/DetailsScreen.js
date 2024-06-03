@@ -22,11 +22,16 @@ import {
 } from "firebase/firestore";
 
 import OptionModal from "../components/OptionModal";
+import { Dropdown } from "react-native-element-dropdown";
 
 export default function DetailsScreen({ route }) {
   const [movie, setMovie] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+
+  const [value, setValue] = useState(null);
+  const [isFocus, setIsFocus] = useState(false);
+
   const movieId = route.params.movieId;
   const { addToWatchList, removeFromWatchList, watchList } = useContext(
     WatchListContext
@@ -135,12 +140,34 @@ export default function DetailsScreen({ route }) {
           isSaved={isSaved}
         >
           <Text>Select List:</Text>
+          <Dropdown
+            style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            data={[
+              { label: "WatchList", value: "WatchList" },
+              { label: "Watched", value: "Watched" },
+              { label: "Favorites", value: "Favorites" },
+              { label: "Add New List", value: "Add New List" },
+            ]}
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder={!isFocus ? "Select item" : "..."}
+            searchPlaceholder="Search..."
+            value={value}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            onChange={(item) => {
+              setValue(item.value);
+              setIsFocus(false);
+            }}
+          />
           <View style={styles.buttonView}>
             <TouchableOpacity
               style={styles.modalSaveButton}
-              onPress={() =>
-                handleSaveButtonClick() && setModalOpen(false)
-              }
+              onPress={() => handleSaveButtonClick() && setModalOpen(false)}
             >
               <Text style={[styles.buttonText]}>Save</Text>
             </TouchableOpacity>
@@ -226,20 +253,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     width: "90%",
-    // backgroundColor: "red",
   },
   modalSaveButton: {
     backgroundColor: "#00adb5",
     borderRadius: 5,
     marginTop: 10,
-    // marginHorizontal: 10,
     width: "40%",
   },
   closeButton: {
     backgroundColor: "#393e46",
     borderRadius: 5,
     marginTop: 10,
-    // marginHorizontal: 10,
     width: "40%",
   },
   buttonText: {
@@ -249,4 +273,40 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   // END Modal styles
+  // BEGIN Dropdown
+  dropdown: {
+    height: 50,
+    width: "90%",
+    borderColor: "gray",
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  label: {
+    position: "absolute",
+    backgroundColor: "white",
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+  // END Dropdown styles
 });

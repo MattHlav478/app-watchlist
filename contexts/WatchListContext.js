@@ -28,17 +28,22 @@ export const WatchListProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchUserMovieList = async () => {
-      if (user) {
-        let userMovieListData = (
-          await getDoc(doc(db, "movies", user.email))
-        ).data();
-        let userMovieList = userMovieListData ? userMovieListData.movies : [];
-        setWatchList(userMovieList);
-      } else {
-        setWatchList([]); // Reset watchList when no user is signed in
+      try {
+        if (user) {
+          let userMovieListData = (
+            await getDoc(doc(db, "movies", user.email))
+          ).data();
+          let userMovieList = userMovieListData ? userMovieListData.movies : [];
+          setWatchList(userMovieList);
+        } else {
+          setWatchList([]); // Reset watchList when no user is signed in
+        } fetchUserMovieList();
+
       }
-    };
-    fetchUserMovieList();
+      catch (error) {
+        console.error("Error fetching user movie list:", error);
+      }
+    }
   }, [user]); // Add user as a dependency to re-run the effect when user changes
 
   // Function to add a movie to the watch list.

@@ -140,56 +140,54 @@ export default function DetailsScreen({ route }) {
           movie={movie}
           isSaved={isSaved}
         >
-          <Text>Select List:</Text>
-          <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            data={Object.keys(watchLists)
-              .map((listName) => ({
-                label: listName,
-                value: listName,
-              }))
-              .concat([
-                { label: "Add New List", value: "Add New List" },
-              ])}
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder={!isFocus ? "Select list" : "..."}
-            searchPlaceholder="Search..."
-            value={value}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={(item) => {
-              setValue(item.value);
-              setCreatingNewList(item.value === "Add New List");
-              setIsFocus(false);
-            }}
-          />
-          {creatingNewList && (
-            <TextInput
-              style={styles.input}
-              placeholder="Enter new list name"
-              value={newListName}
-              onChangeText={setNewListName}
+            <Text>Select List:</Text>
+            <Dropdown
+              style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              data={Object.keys(watchLists)
+                .map((listName) => ({
+                  label: listName,
+                  value: listName,
+                }))
+                .concat([{ label: "Add New List", value: "Add New List" }])}
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={!isFocus ? "Select list" : "..."}
+              searchPlaceholder="Search..."
+              value={value}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={(item) => {
+                setValue(item.value);
+                setCreatingNewList(item.value === "Add New List");
+                setIsFocus(false);
+              }}
             />
-          )}
-          <View style={styles.buttonView}>
-            <TouchableOpacity
-              style={styles.modalSaveButton}
-              onPress={() => handleSaveButtonClick(value)}
-            >
-              <Text style={[styles.buttonText]}>Save</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setModalOpen(false)}
-            >
-              <Text style={[styles.buttonText]}>Cancel</Text>
-            </TouchableOpacity>
-          </View>
+            {creatingNewList && (
+              <TextInput
+                style={styles.input}
+                placeholder="Enter new list name"
+                value={newListName}
+                onChangeText={setNewListName}
+              />
+            )}
+            <View style={styles.buttonView}>
+              <TouchableOpacity
+                style={styles.modalSaveButton}
+                onPress={() => handleSaveButtonClick(value)}
+              >
+                <Text style={[styles.buttonText]}>Save</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setModalOpen(false)}
+              >
+                <Text style={[styles.buttonText]}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
         </OptionModal>
       )}
     </View>
@@ -287,12 +285,17 @@ const styles = StyleSheet.create({
   // END Modal styles
   // BEGIN Dropdown
   dropdown: {
-    height: 50,
+    color: "#fff",
+    backgroundColor: "#2e2e38",
+    borderRadius: 5,
+    marginTop: 5,
+    marginBottom: 5,
+    marginHorizontal: 20,
+    paddingLeft: 10,
+    paddingRight: 10,
+    height: 40,
     width: "90%",
-    borderColor: "gray",
-    borderWidth: 0.5,
-    borderRadius: 8,
-    paddingHorizontal: 8,
+    fontSize: 16,
   },
   icon: {
     marginRight: 5,
@@ -308,9 +311,11 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: 16,
+    color: "#aaa",
   },
   selectedTextStyle: {
     fontSize: 16,
+    color: "#aaa",
   },
   iconStyle: {
     width: 20,

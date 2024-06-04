@@ -1,18 +1,9 @@
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  Modal,
-} from "react-native";
+import { View, StyleSheet, Modal } from "react-native";
 
-export default function OptionModal({
-  children
-}) {
+export default function OptionModal({ children }) {
   return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-    >
+    <Modal animationType="slide" transparent={true}>
       <View style={styles.modalContainer}>{children}</View>
     </Modal>
   );

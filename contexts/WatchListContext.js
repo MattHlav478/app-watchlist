@@ -23,54 +23,59 @@ export const WatchListContext = createContext();
 
 // Creating a Provider component that will wrap the children components and provide them with the watch list data.
 export const WatchListProvider = ({ children }) => {
-  const [watchList, setWatchList] = useState([]);
+  const [watchLists, setWatchLists] = useState([]);
   const user = auth.currentUser;
 
   useEffect(() => {
-    const fetchUserMovieList = async () => {
+    const fetchUserMovieLists = async () => {
       if (user) {
-        let userMovieListData = (
-          await getDoc(doc(db, "movies", user.email))
-        ).data();
-        let userMovieList = userMovieListData ? userMovieListData.movies : [];
-        setWatchList(userMovieList);
+        const userDoc = await getDoc(doc(db, "movies", user.email));
+        const userMovieLists = userDoc.exists()
+          ? userDoc.data().watchLists
+          : {};
+        setWatchLists(userMovieLists);
       } else {
-        setWatchList([]); // Reset watchList when no user is signed in
+        setWatchLists({});
       }
     };
-    fetchUserMovieList();
+    fetchUserMovieLists();
   }, [user]); // Add user as a dependency to re-run the effect when user changes
 
   // Function to add a movie to the watch list.
-  const addToWatchList = (movie) => {
-    // Checking if the movie to be added already exists in the watch list based on its ID to prevent duplicates.
-    const alreadyExists = watchList.some((item) => item.id === movie.id);
+  const addToWatchList = (movie, listName) => {
+    if (!listName) return;
+
+    const updatedList = watchLists[listName] ? [...watchLists[listName]] : [];
+    const alreadyExists = updatedList.some((item) => item.id === movie.id);
     if (!alreadyExists) {
-      // If the movie doesn't exist, add it to the current watch list and update the state.
-      setWatchList([...watchList, movie]);
-      setDoc(doc(db, "movies", user.email), {
-        // push new movie title to movies array in firebase
-        movies: [...watchList, movie],
-      });
-      setDoc(doc(db, "users", user.uid), {
-        timestamp: Date.now(),
-      });
-      setDoc(doc(db, "test_messages", user.email), {
-        // to: (await getDoc(doc(db, "users", user.email))),
-        body: `You added ${movie.title} to your watchlist!`,
-      });
+      updatedList.push(movie);
+      const updatedWatchLists = { ...watchLists, [listName]: updatedList };
+      setWatchLists(updatedWatchLists);
+
+      setDoc(doc(db, "movies", user.email), { watchLists: updatedWatchLists });
     }
   };
 
   // Function to remove a movie from the watch list.
-  const removeFromWatchList = (movieId) => {
-    // Updating the watch list by filtering out the movie that matches the given ID.
-    setWatchList(watchList.filter((movie) => movie.id !== movieId));
-    console.log(`User's movie list: ${watchList}`);
-    setDoc(doc(db, "movies", user.email), {
-      // push new movie title to movies array in firebase
-      movies: watchList.filter((movie) => movie.id !== movieId),
-    });
+  const removeFromWatchList = (movieId, listName) => {
+    if (!listName) return;
+
+    const updatedList = watchLists[listName].filter(
+      (movie) => movie.id !== movieId
+    );
+    const updatedWatchLists = { ...watchLists, [listName]: updatedList };
+    setWatchLists(updatedWatchLists);
+
+    setDoc(doc(db, "movies", user.email), { watchLists: updatedWatchLists });
+  };
+
+  const createWatchList = (listName) => {
+    if (!listName || watchLists[listName]) return;
+
+    const updatedWatchLists = { ...watchLists, [listName]: [] };
+    setWatchLists(updatedWatchLists);
+
+    setDoc(doc(db, "users", user.email), { watchLists: updatedWatchLists });
   };
 
   // Returning the Provider component with the watch list state and functions as the value.
@@ -78,10 +83,11 @@ export const WatchListProvider = ({ children }) => {
   return (
     <WatchListContext.Provider
       value={{
-        watchList,
-        setWatchList,
+        watchLists,
+        setWatchLists,
         addToWatchList,
         removeFromWatchList,
+        createWatchList,
       }}
     >
       {/* Rendering the children components passed to this Provider */}

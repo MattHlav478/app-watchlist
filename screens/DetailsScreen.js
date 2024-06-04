@@ -3,6 +3,7 @@ import {
   StyleSheet,
   View,
   Text,
+  TextInput,
   Image,
   TouchableOpacity,
   ScrollView,
@@ -31,9 +32,11 @@ export default function DetailsScreen({ route }) {
 
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
+  const [newListName, setNewListName] = useState("");
+  const [creatingNewList, setCreatingNewList] = useState(false);
 
   const movieId = route.params.movieId;
-  const { addToWatchList, removeFromWatchList, watchList } = useContext(
+  const { addToWatchList, removeFromWatchList, createWatchList, watchLists } = useContext(
     WatchListContext
   );
 
@@ -57,12 +60,15 @@ export default function DetailsScreen({ route }) {
   }, [movieId]);
 
   useEffect(() => {
-    if (Array.isArray(watchList)) {
-      setIsSaved(watchList.some((item) => item.id === movieId));
+    if (watchLists) {
+      const isMovieSaved = Object.values(watchLists).some((list) =>
+        list.some((item) => item.id === movieId)
+      );
+      setIsSaved(isMovieSaved);
     } else {
-      console.error("watchList is not an array:", watchList);
+      console.error("watchLists is not an object:", watchLists);
     }
-  }, [watchList, movieId]);
+  }, [watchLists, movieId]);
 
   if (!movie) {
     return (
@@ -72,23 +78,19 @@ export default function DetailsScreen({ route }) {
     );
   }
 
-  const handleSaveButtonClick = async () => {
-    const user = auth.currentUser;
-    let userMovieListData = (
-      await getDoc(doc(db, "movies", user.email))
-    ).data();
-    let userMovieList = userMovieListData ? userMovieListData.movies : [];
-    addToWatchList(movie);
+  const handleSaveButtonClick = async (listName) => {
+    if (listName === "Add New List" && newListName.trim()) {
+      createWatchList(newListName.trim());
+      addToWatchList(movie, newListName.trim());
+    } else {
+      addToWatchList(movie, listName);
+    }
     setIsSaved(true);
+    setModalOpen(false);
   };
 
   const handleRemoveButtonClick = async () => {
-    const user = auth.currentUser;
-    let userMovieListData = (
-      await getDoc(doc(db, "movies", user.email))
-    ).data();
-    let userMovieList = userMovieListData ? userMovieListData.movies : [];
-    removeFromWatchList(movie.id);
+    removeFromWatchList(movie.id, value);
     setIsSaved(false);
   };
 
@@ -118,18 +120,14 @@ export default function DetailsScreen({ route }) {
           style={styles.removeButton}
           onPress={handleRemoveButtonClick}
         >
-          <Text style={styles.saveButtonText}>
-            {isSaved ? "Remove from WatchList" : "Save to WatchList"}
-          </Text>
+          <Text style={styles.saveButtonText}>Remove from WatchList</Text>
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
           style={styles.saveButton}
           onPress={() => setModalOpen(true)}
         >
-          <Text style={styles.saveButtonText}>
-            {isSaved ? "Remove from WatchList" : "Save to WatchList"}
-          </Text>
+          <Text style={styles.saveButtonText}>Save to WatchList</Text>
         </TouchableOpacity>
       )}
 
@@ -145,29 +143,38 @@ export default function DetailsScreen({ route }) {
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
-            data={[
-              { label: "WatchList", value: "WatchList" },
-              { label: "Watched", value: "Watched" },
-              { label: "Favorites", value: "Favorites" },
-              { label: "Add New List", value: "Add New List" },
-            ]}
+            data={Object.keys(watchLists)
+              .map((listName) => ({
+                label: listName,
+                value: listName,
+              }))
+              .concat([{ label: "Add New List", value: "Add New List" }])}
             maxHeight={300}
             labelField="label"
             valueField="value"
-            placeholder={!isFocus ? "Select item" : "..."}
+            placeholder={!isFocus ? "Select list" : "..."}
             searchPlaceholder="Search..."
             value={value}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onChange={(item) => {
               setValue(item.value);
+              setCreatingNewList(item.value === "Add New List");
               setIsFocus(false);
             }}
           />
+          {creatingNewList && (
+            <TextInput
+              style={styles.input}
+              placeholder="Enter new list name"
+              value={newListName}
+              onChangeText={setNewListName}
+            />
+          )}
           <View style={styles.buttonView}>
             <TouchableOpacity
               style={styles.modalSaveButton}
-              onPress={() => handleSaveButtonClick() && setModalOpen(false)}
+              onPress={() => handleSaveButtonClick(value)}
             >
               <Text style={[styles.buttonText]}>Save</Text>
             </TouchableOpacity>

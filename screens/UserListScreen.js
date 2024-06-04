@@ -133,12 +133,16 @@ const styles = StyleSheet.create({
   },
   // BEGIN Dropdown
   dropdown: {
-    height: 50,
-    width: "90%",
-    borderColor: "gray",
-    borderWidth: 0.5,
-    borderRadius: 8,
-    paddingHorizontal: 8,
+    color: "#fff",
+    backgroundColor: "#2e2e38",
+    borderRadius: 5,
+    marginTop: 5,
+    marginBottom: 5,
+    marginHorizontal: 20,
+    paddingLeft: 10,
+    paddingRight: 10,
+    height: 40,
+    fontSize: 16,
   },
   icon: {
     marginRight: 5,
@@ -154,9 +158,11 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: 16,
+    color: "#aaa",
   },
   selectedTextStyle: {
     fontSize: 16,
+    color: "#aaa",
   },
   iconStyle: {
     width: 20,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
@@ -17,6 +17,9 @@ const SearchDropdown = ({
   setSearchResults,
   navigation,
 }) => {
+  const [isFocus, setIsFocus] = useState(false);
+  const inputRef = useRef();
+
   const handleChangeText = async (text) => {
     setSearchQuery(text);
 
@@ -28,6 +31,13 @@ const SearchDropdown = ({
     }
   };
 
+  const handleClearInput = () => {
+    setSearchQuery("");
+    setIsFocus(false);
+    setSearchResults([]);
+    inputRef.current.blur();
+  };
+
   const handleSelectMovie = (movieId) => {
     setSearchQuery("");
     setSearchResults([]);
@@ -36,34 +46,49 @@ const SearchDropdown = ({
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        value={searchQuery}
-        onChangeText={handleChangeText}
-        placeholder="Search movies"
-        placeholderTextColor="#aaa"
-      />
-      <FlatList
-        data={searchResults}
-        renderItem={({ item }) => (
+      <View style={styles.inputContainer}>
+        <TextInput
+          ref={inputRef}
+          style={styles.input}
+          value={searchQuery}
+          onChangeText={handleChangeText}
+          placeholder="Search movies"
+          placeholderTextColor="#aaa"
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+        />
+        {isFocus && (
           <TouchableOpacity
-            style={styles.searchResult}
-            onPress={() => handleSelectMovie(item.id)}
+            style={styles.clearInputButton}
+            onPress={handleClearInput}
           >
-            <Image
-              style={styles.poster}
-              source={{
-                uri: `https://image.tmdb.org/t/p/w200${item.poster_path}`,
-              }}
-            />
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.year}>
-              {new Date(item.release_date).getFullYear()}
-            </Text>
+            <Text style={styles.clearInputText}>x</Text>
           </TouchableOpacity>
         )}
-        keyExtractor={(item) => String(item.id)}
-      />
+      </View>
+      {isFocus && searchResults.length !== 0 && (
+        <FlatList
+          data={searchResults}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.searchResult}
+              onPress={() => handleSelectMovie(item.id)}
+            >
+              <Image
+                style={styles.poster}
+                source={{
+                  uri: `https://image.tmdb.org/t/p/w200${item.poster_path}`,
+                }}
+              />
+              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.year}>
+                {new Date(item.release_date).getFullYear()}
+              </Text>
+            </TouchableOpacity>
+          )}
+          keyExtractor={(item) => String(item.id)}
+        />
+      )}
     </View>
   );
 };
@@ -72,7 +97,16 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#1c1c2b",
   },
+  inputContainer: {
+    position: "relative",
+    flexDirection: "row",
+    alignItems: "center",
+    height: 40,
+    marginVertical: 10,
+  },
   input: {
+    position: "absolute",
+    left: 0,
     color: "#fff",
     backgroundColor: "#2e2e38",
     borderRadius: 5,
@@ -82,7 +116,17 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     height: 40,
+    width: "90%",
     fontSize: 16,
+  },
+  clearInputButton: {
+    position: "absolute",
+    right: 35,
+    color: "#aaa",
+  },
+  clearInputText: {
+    color: "#aaa",
+    fontSize: 24,
   },
   searchResult: {
     flexDirection: "row",

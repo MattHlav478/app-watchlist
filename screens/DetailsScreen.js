@@ -3,6 +3,7 @@ import {
   StyleSheet,
   View,
   Text,
+  TextInput,
   Image,
   TouchableOpacity,
   ScrollView,
@@ -22,15 +23,25 @@ import {
 } from "firebase/firestore";
 
 import OptionModal from "../components/OptionModal";
+import { Dropdown } from "react-native-element-dropdown";
 
 export default function DetailsScreen({ route }) {
   const [movie, setMovie] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+
+  const [value, setValue] = useState(null);
+  const [isFocus, setIsFocus] = useState(false);
+  const [newListName, setNewListName] = useState("");
+  const [creatingNewList, setCreatingNewList] = useState(false);
+
   const movieId = route.params.movieId;
-  const { addToWatchList, removeFromWatchList, watchList } = useContext(
-    WatchListContext
-  );
+  const {
+    addToWatchList,
+    removeFromWatchList,
+    createWatchList,
+    watchLists,
+  } = useContext(WatchListContext);
 
   const apiKey = process.env.EXPO_PUBLIC_TMDB_API_KEY;
 
@@ -52,12 +63,15 @@ export default function DetailsScreen({ route }) {
   }, [movieId]);
 
   useEffect(() => {
-    if (Array.isArray(watchList)) {
-      setIsSaved(watchList.some((item) => item.id === movieId));
+    if (watchLists) {
+      const isMovieSaved = Object.values(watchLists).some((list) =>
+        list.some((item) => item.id === movieId)
+      );
+      setIsSaved(isMovieSaved);
     } else {
-      console.error("watchList is not an array:", watchList);
+      console.error("watchLists is not an object:", watchLists);
     }
-  }, [watchList, movieId]);
+  }, [watchLists, movieId]);
 
   if (!movie) {
     return (
@@ -67,23 +81,19 @@ export default function DetailsScreen({ route }) {
     );
   }
 
-  const handleSaveButtonClick = async () => {
-    const user = auth.currentUser;
-    let userMovieListData = (
-      await getDoc(doc(db, "movies", user.email))
-    ).data();
-    let userMovieList = userMovieListData ? userMovieListData.movies : [];
-    addToWatchList(movie);
+  const handleSaveButtonClick = async (listName) => {
+    if (listName === "Add New List" && newListName.trim()) {
+      createWatchList(newListName.trim());
+      addToWatchList(movie, newListName.trim());
+    } else {
+      addToWatchList(movie, listName);
+    }
     setIsSaved(true);
+    setModalOpen(false);
   };
 
   const handleRemoveButtonClick = async () => {
-    const user = auth.currentUser;
-    let userMovieListData = (
-      await getDoc(doc(db, "movies", user.email))
-    ).data();
-    let userMovieList = userMovieListData ? userMovieListData.movies : [];
-    removeFromWatchList(movie.id);
+    removeFromWatchList(movie.id, value);
     setIsSaved(false);
   };
 
@@ -113,18 +123,14 @@ export default function DetailsScreen({ route }) {
           style={styles.removeButton}
           onPress={handleRemoveButtonClick}
         >
-          <Text style={styles.saveButtonText}>
-            {isSaved ? "Remove from WatchList" : "Save to WatchList"}
-          </Text>
+          <Text style={styles.saveButtonText}>Remove from WatchList</Text>
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
           style={styles.saveButton}
           onPress={() => setModalOpen(true)}
         >
-          <Text style={styles.saveButtonText}>
-            {isSaved ? "Remove from WatchList" : "Save to WatchList"}
-          </Text>
+          <Text style={styles.saveButtonText}>Save to WatchList</Text>
         </TouchableOpacity>
       )}
 
@@ -135,12 +141,45 @@ export default function DetailsScreen({ route }) {
           isSaved={isSaved}
         >
           <Text>Select List:</Text>
+          <Dropdown
+            style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            data={Object.keys(watchLists)
+              .map((listName) => ({
+                label: listName,
+                value: listName,
+              }))
+              .concat([
+                { label: "Add New List", value: "Add New List" },
+              ])}
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder={!isFocus ? "Select list" : "..."}
+            searchPlaceholder="Search..."
+            value={value}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            onChange={(item) => {
+              setValue(item.value);
+              setCreatingNewList(item.value === "Add New List");
+              setIsFocus(false);
+            }}
+          />
+          {creatingNewList && (
+            <TextInput
+              style={styles.input}
+              placeholder="Enter new list name"
+              value={newListName}
+              onChangeText={setNewListName}
+            />
+          )}
           <View style={styles.buttonView}>
             <TouchableOpacity
               style={styles.modalSaveButton}
-              onPress={() =>
-                handleSaveButtonClick() && setModalOpen(false)
-              }
+              onPress={() => handleSaveButtonClick(value)}
             >
               <Text style={[styles.buttonText]}>Save</Text>
             </TouchableOpacity>
@@ -226,20 +265,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     width: "90%",
-    // backgroundColor: "red",
   },
   modalSaveButton: {
     backgroundColor: "#00adb5",
     borderRadius: 5,
     marginTop: 10,
-    // marginHorizontal: 10,
     width: "40%",
   },
   closeButton: {
     backgroundColor: "#393e46",
     borderRadius: 5,
     marginTop: 10,
-    // marginHorizontal: 10,
     width: "40%",
   },
   buttonText: {
@@ -249,4 +285,40 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   // END Modal styles
+  // BEGIN Dropdown
+  dropdown: {
+    height: 50,
+    width: "90%",
+    borderColor: "gray",
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  label: {
+    position: "absolute",
+    backgroundColor: "white",
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+  // END Dropdown styles
 });

@@ -36,9 +36,12 @@ export default function DetailsScreen({ route }) {
   const [creatingNewList, setCreatingNewList] = useState(false);
 
   const movieId = route.params.movieId;
-  const { addToWatchList, removeFromWatchList, createWatchList, watchLists } = useContext(
-    WatchListContext
-  );
+  const {
+    addToWatchList,
+    removeFromWatchList,
+    createWatchList,
+    watchLists,
+  } = useContext(WatchListContext);
 
   const apiKey = process.env.EXPO_PUBLIC_TMDB_API_KEY;
 
@@ -148,7 +151,9 @@ export default function DetailsScreen({ route }) {
                 label: listName,
                 value: listName,
               }))
-              .concat([{ label: "Add New List", value: "Add New List" }])}
+              .concat([
+                { label: "Add New List", value: "Add New List" },
+              ])}
             maxHeight={300}
             labelField="label"
             valueField="value"

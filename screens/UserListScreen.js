@@ -12,13 +12,23 @@ import {
 import WatchListItem from "../components/WatchListItem";
 import { WatchListContext } from "../contexts/WatchListContext";
 
+import { Dropdown } from "react-native-element-dropdown";
+
 // The main component for the UserListScreen, where the user's watch list is displayed.
 export default function UserListScreen({ navigation }) {
   // Accessing the watchList and removeFromWatchList function from the WatchListContext.
-  const { watchList, removeFromWatchList } = useContext(WatchListContext);
+  const { watchLists, removeFromWatchList } = useContext(WatchListContext);
+  const [currentList, setCurrentList] = useState("Default"); // Local state to track the current list being displayed.
+
+  // BEGIN states for dropdown
+  const [value, setValue] = useState(null);
+  const [isFocus, setIsFocus] = useState(false);
+  const [newListName, setNewListName] = useState("");
+  const [creatingNewList, setCreatingNewList] = useState(false);
+  // END states for dropdown
 
   // Local state to handle filtered version of the watch list.
-  const [filteredWatchList, setFilteredWatchList] = useState(watchList);
+  const [filteredWatchList, setFilteredWatchList] = useState(watchLists);
 
   // Function to filter the watch list based on different criteria like category, rating, or runtime.
   const filterWatchList = (filterType) => {
@@ -27,62 +37,80 @@ export default function UserListScreen({ navigation }) {
     switch (filterType) {
       case "category":
         // Sorting by category using the first genre ID.
-        filteredList = [...watchList].sort(
+        filteredList = [...watchLists].sort(
           (a, b) => a.genre_ids[0] - b.genre_ids[0]
         );
         break;
       case "rating":
         // Sorting by rating in descending order.
-        filteredList = [...watchList].sort(
+        filteredList = [...watchLists].sort(
           (a, b) => b.vote_average - a.vote_average
         );
         break;
       case "runtime":
         // Sorting by runtime in ascending order.
-        filteredList = [...watchList].sort((a, b) => a.runtime - b.runtime);
+        filteredList = [...watchLists].sort((a, b) => a.runtime - b.runtime);
         break;
       default:
         // Default case returns the unsorted watch list.
-        filteredList = watchList;
+        filteredList = watchLists;
         break;
     }
     // Updating the local state with the filtered list.
     setFilteredWatchList(filteredList);
   };
 
-  // useEffect hook to update the filtered watch list whenever the global watch list changes.
   useEffect(() => {
-    // Set the filtered watch list to match the updated watch list.
-    // setFilteredWatchList(watchList);
+    // console log the movies in the current watchlist
   }, []);
 
   // The main render return for the component.
-  if (!watchList) {
+  if (!watchLists) {
     return <Text>Loading...</Text>; // Render a loading message if watchList is not yet available
   } else {
     return (
       <View style={styles.container}>
+        <Dropdown
+          style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          data={Object.keys(watchLists).map((listName) => ({
+            label: listName,
+            value: listName,
+          }))}
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder={!isFocus ? "Select list" : "..."}
+          searchPlaceholder="Search..."
+          value={value}
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          onChange={(item) => {
+            setValue(item.value);
+            setCreatingNewList(item.value === "Add New List");
+            setCurrentList(item.value);
+            setIsFocus(false);
+          }}
+        />
         {/* Conditional rendering based on whether the watch list is empty. */}
-        {watchList.length === 0 ? (
+        {watchLists.length === 0 ? (
           <Text style={styles.emptyText}>Your WatchList is empty.</Text>
         ) : (
           <>
-            {/* FlatList to render each item in the filtered watch list. */}
+            {/* FlatList to render each item in the current watch list. */}
             <FlatList
-              data={watchList} // Data source is the filtered watch list.
+              data={Object.values(watchLists[currentList])}
+              keyExtractor={(item) => item.id.toString()}
+              key={currentList}
               renderItem={({ item }) => (
-                // Render each item using the WatchListItem component.
                 <WatchListItem
                   movie={item}
-                  onPress={() =>
-                    // Navigate to the Details screen when an item is pressed, passing the movie ID.
-                    navigation.navigate("Details", { movieId: item.id })
-                  }
-                  onRemove={() => removeFromWatchList(item.id)} // Handle removal of an item.
+                  onRemove={() => removeFromWatchList(item.id, currentList)}
+                  navigation={navigation}
                 />
               )}
-              keyExtractor={(item) => item.id.toString()} // Defining a unique key for each item.
-              numColumns={1} // Number of columns in the grid.
             />
           </>
         )}
@@ -103,20 +131,40 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 20,
   },
-  // Styles commented out as they are related to filter buttons which are not being used currently.
-  // filterButtonsContainer: {
-  //   flexDirection: 'row',
-  //   justifyContent: 'space-around',
-  //   marginBottom: 10,
-  // },
-  // filterButton: {
-  //   backgroundColor: '#00adb5',
-  //   paddingHorizontal: 10,
-  //   paddingVertical: 5,
-  //   borderRadius: 10,
-  // },
-  // filterButtonText: {
-  //   color: '#ffffff',
-  //   fontSize: 14,
-  // },
+  // BEGIN Dropdown
+  dropdown: {
+    height: 50,
+    width: "90%",
+    borderColor: "gray",
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  label: {
+    position: "absolute",
+    backgroundColor: "white",
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+  // END Dropdown styles
 });

@@ -7,10 +7,13 @@ import {
   ScrollView,
   Modal,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import { handleSignOut } from "../scripts/userAuth";
 
 export default function NavMenu({ navOpen, setNavOpen, setUser }) {
+  const navigation = useNavigation();
+
   const handleLogOut = () => {
     setUser(false);
     setNavOpen(!navOpen);
@@ -34,7 +37,15 @@ export default function NavMenu({ navOpen, setNavOpen, setUser }) {
         >
           <Text style={[styles.navText]}>X</Text>
         </TouchableOpacity>
-        <Text style={[styles.navText]}>Dashboard</Text>
+        <Text
+          style={[styles.navText]}
+          onPress={() => {
+            navigation.navigate("Dashboard");
+            setNavOpen(!navOpen);
+          }}
+        >
+          Dashboard
+        </Text>
         <Text style={[styles.navText]}>Settings</Text>
         <Text style={[styles.logoutButton]} onPress={handleLogOut}>
           Log Out

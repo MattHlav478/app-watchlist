@@ -71,7 +71,7 @@ export default function UserListScreen({ navigation }) {
     return (
       <View style={styles.container}>
         <Dropdown
-          style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+          style={[styles.dropdown, isFocus && { borderColor: "#00adb5" }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}

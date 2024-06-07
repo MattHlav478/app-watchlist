@@ -44,17 +44,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // const logAllStorage = async () => {
-    //   try {
-    //     const keys = await AsyncStorage.getAllKeys(); // Retrieve all keys stored
-    //     const items = await AsyncStorage.multiGet(keys); // Get all items for these keys
-    //     console.log("storage items", items);
-    //   } catch (error) {
-    //     console.error("Failed to log storage:", error);
-    //   }
-    // };
-
-    const checkSignInStatus = async () => {
+     const checkSignInStatus = async () => {
       try {
         const email = await AsyncStorage.getItem("email");
         const password = await AsyncStorage.getItem("password");
@@ -127,7 +117,7 @@ export default function App() {
                 />
 
                 <Tab.Screen
-                  name="UserList"
+                  name="UserListStack"
                   component={UserListStackScreen}
                   options={{
                     tabBarLabel: "",
@@ -141,8 +131,8 @@ export default function App() {
                   }}
                 />
                 <Tab.Screen
-                  name="Dashboard"
-                  component={DashboardScreen}
+                  name="DashboardStack"
+                  component={DashboardStackScreen}
                   options={{
                     tabBarLabel: "",
                     tabBarIcon: ({ color, size }) => (
@@ -171,14 +161,13 @@ const styles = StyleSheet.create({
   },
 });
 
-function AuthStackScreen({ navigation, user, setUser }) {
+function AuthStackScreen({ user, setUser }) {
   return (
     <AuthStack.Navigator screenOptions={{ headerShown: false }}>
       <AuthStack.Screen name="SignIn">
         {(props) => (
           <SignInScreen
             {...props}
-            // navigation={navigation}
             user={user}
             setUser={setUser}
             UserFormContext={UserFormContext}
@@ -189,7 +178,6 @@ function AuthStackScreen({ navigation, user, setUser }) {
         {(props) => (
           <SignupScreen
             {...props}
-            // navigation={navigation}
             user={user}
             setUser={setUser}
             UserFormContext={UserFormContext}
@@ -227,7 +215,7 @@ function UserListStackScreen() {
       }}
     >
       <UserListStack.Screen
-        name="UserListStackScreen"
+        name="UserList"
         component={UserListScreen}
       />
       <UserListStack.Screen name="Details" component={DetailsScreen} />

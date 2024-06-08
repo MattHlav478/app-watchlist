@@ -1,11 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
+import React from "react";
 import {
   StyleSheet,
   View,
   Text,
-  Image,
-  TouchableOpacity,
-  ScrollView,
 } from "react-native";
 import { WatchListContext } from "../contexts/WatchListContext";
 

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -65,7 +65,6 @@ export default function CustomModal({
 
 const styles = StyleSheet.create({
   modalContainer: {
-    // position: "absolute",
     flex: 1,
     zIndex: 100,
     top: 0,

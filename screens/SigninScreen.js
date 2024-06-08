@@ -7,10 +7,8 @@ import {
   TouchableOpacity,
   Keyboard,
   TouchableWithoutFeedback,
-  Modal,
 } from "react-native";
 import { handleSignIn } from "../scripts/userAuth";
-import { set } from "firebase/database";
 import { auth, db } from "../services/firebaseConnection";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomModal from "../components/CustomModal";
@@ -138,7 +136,7 @@ export default function SignInScreen({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1c1c2b", // Dark navy background
+    backgroundColor: "#1c1c2b",
     alignItems: "center",
     justifyContent: "center",
     padding: 20,

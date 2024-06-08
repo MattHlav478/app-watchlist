@@ -4,7 +4,6 @@ import React, {
   useEffect,
   useTransition,
 } from "react";
-import preloadedMovies from "./preloadedmovies";
 
 import { db, auth } from "../services/firebaseConnection";
 import {
@@ -14,8 +13,7 @@ import {
   updateDoc,
   collection,
   getDoc,
-  Timestamp,
-  serverTimestamp,
+  getDocs,
 } from "firebase/firestore";
 
 // Creating a Context for the watch list which will be used to provide and consume the watch list data.

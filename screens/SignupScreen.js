@@ -68,15 +68,6 @@ export default function SignupScreen({
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <Text style={styles.title}>Sign Up</Text>
-        {/* <TextInput
-          style={styles.input}
-          textContentType="emailAddress"
-          placeholder="Username"
-          placeholderTextColor="#aaaaaa"
-          keyboardType="default"
-          onChangeText={(text) => handleInputChange("username", text)}
-          required
-        /> */}
         <TextInput
           style={styles.input}
           textContentType="emailAddress"
@@ -130,7 +121,7 @@ export default function SignupScreen({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1c1c2b", // Dark navy background
+    backgroundColor: "#1c1c2b",
     alignItems: "center",
     justifyContent: "center",
     padding: 20,

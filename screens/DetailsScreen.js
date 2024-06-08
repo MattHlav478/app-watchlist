@@ -10,18 +10,6 @@ import {
 } from "react-native";
 import { WatchListContext } from "../contexts/WatchListContext";
 
-import { db, auth } from "../services/firebaseConnection";
-import {
-  doc,
-  addDoc,
-  setDoc,
-  updateDoc,
-  collection,
-  getDoc,
-  Timestamp,
-  serverTimestamp,
-} from "firebase/firestore";
-
 import OptionModal from "../components/OptionModal";
 import { Dropdown } from "react-native-element-dropdown";
 
@@ -52,7 +40,6 @@ export default function DetailsScreen({ route }) {
           `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=en-US`
         );
         const data = await response.json();
-        // console.log("Movie details:", data);
         setMovie(data);
       } catch (error) {
         console.error("Error fetching movie details:", error);

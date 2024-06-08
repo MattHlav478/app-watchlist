@@ -1,10 +1,9 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaView, StatusBar } from "react-native";
 import { createStackNavigator, Stack } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { auth } from "./services/firebaseConnection";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -17,7 +16,6 @@ import DashboardScreen from "./screens/Dashboard";
 
 // import components
 import Header from "./components/Header";
-import NavMenu from "./components/NavMenu";
 
 import { handleSignIn } from "./scripts/userAuth";
 
@@ -26,7 +24,6 @@ import { WatchListProvider } from "./contexts/WatchListContext";
 
 // import icons
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { set } from "firebase/database";
 
 // create stack navigators
 const AuthStack = createStackNavigator();
@@ -41,7 +38,6 @@ export default function App() {
   const [user, setUser] = useState(false);
   const [userFormData, setUserFormData] = useState({});
   const [userInitial, setUserInitial] = useState("!");
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
      const checkSignInStatus = async () => {

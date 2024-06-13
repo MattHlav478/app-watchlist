@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     width: "100%",
-    height: "100%",
+    height: "50%",
     backgroundColor: "#1c1c2b",
     justifyContent: "center",
     alignItems: "center",

@@ -8,7 +8,7 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import { searchMovies } from "../services/api";
+import { searchMovies, searchTVShows, searchAll } from "../services/api";
 
 const SearchDropdown = ({
   searchQuery,
@@ -24,7 +24,7 @@ const SearchDropdown = ({
     setSearchQuery(text);
 
     if (text.length >= 3) {
-      const results = await searchMovies(text);
+      const results = await searchAll(text);
       setSearchResults(results);
     } else {
       setSearchResults([]);
@@ -55,7 +55,6 @@ const SearchDropdown = ({
           placeholder="Search movies"
           placeholderTextColor="#aaa"
           onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
         />
         {isFocus && (
           <TouchableOpacity

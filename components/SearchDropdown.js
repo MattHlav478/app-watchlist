@@ -8,7 +8,8 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import { searchMovies } from "../services/api";
+import { searchMovies, searchTVShows, searchAll } from "../services/api";
+import { set } from "firebase/database";
 
 const SearchDropdown = ({
   searchQuery,
@@ -24,7 +25,7 @@ const SearchDropdown = ({
     setSearchQuery(text);
 
     if (text.length >= 3) {
-      const results = await searchMovies(text);
+      const results = await searchAll(text);
       setSearchResults(results);
     } else {
       setSearchResults([]);
@@ -38,10 +39,12 @@ const SearchDropdown = ({
     inputRef.current.blur();
   };
 
-  const handleSelectMovie = (movieId) => {
+  const handleSelectItem = (item) => {
     setSearchQuery("");
     setSearchResults([]);
-    navigation.navigate("Details", { movieId });
+    const itemId = item.id;
+    const itemType = item.media_type;
+    navigation.navigate("Details", { itemId, itemType});
   };
 
   return (
@@ -52,10 +55,9 @@ const SearchDropdown = ({
           style={styles.input}
           value={searchQuery}
           onChangeText={handleChangeText}
-          placeholder="Search movies"
+          placeholder="Search movies and TV shows"
           placeholderTextColor="#aaa"
           onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
         />
         {isFocus && (
           <TouchableOpacity
@@ -72,7 +74,7 @@ const SearchDropdown = ({
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.searchResult}
-              onPress={() => handleSelectMovie(item.id)}
+              onPress={() => handleSelectItem(item)}
             >
               <Image
                 style={styles.poster}

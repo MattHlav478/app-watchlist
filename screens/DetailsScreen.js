@@ -36,6 +36,7 @@ export default function DetailsScreen({ route }) {
 
   useEffect(() => {
     console.log("itemType:", itemType);
+    console.log("itemId:", itemId);
     const fetchMovieDetails = async () => {
       try {
         const response = await fetch(

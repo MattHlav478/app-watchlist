@@ -9,8 +9,10 @@ import {
 } from "react-native";
 
 const TelevisionCarousel = ({ category, shows, navigation }) => {
-  const handleSelectShow = (showId) => {
-    navigation.navigate("Details", { showId });
+  const handleSelectShow = (item) => {
+    console.log("show item", item);
+    const itemId = item.id;
+    navigation.navigate("Details", { itemId, itemType: "tv" });
   };
 
   const TVShowsWithImages = shows.filter((show) => show.poster_path);
@@ -22,7 +24,7 @@ const TelevisionCarousel = ({ category, shows, navigation }) => {
         data={TVShowsWithImages}
         horizontal
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handleSelectShow(item.id)}>
+          <TouchableOpacity onPress={() => handleSelectShow(item)}>
             <View style={styles.card}>
               <Image
                 style={styles.poster}

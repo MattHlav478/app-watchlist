@@ -9,6 +9,7 @@ import {
   TextInput,
 } from "react-native";
 import { searchMovies, searchTVShows, searchAll } from "../services/api";
+import { set } from "firebase/database";
 
 const SearchDropdown = ({
   searchQuery,
@@ -38,10 +39,13 @@ const SearchDropdown = ({
     inputRef.current.blur();
   };
 
-  const handleSelectMovie = (movieId) => {
+  const handleSelectItem = (item) => {
     setSearchQuery("");
     setSearchResults([]);
-    navigation.navigate("Details", { movieId });
+    set
+    const itemId = item.id;
+    const itemType = item.media_type;
+    navigation.navigate("Details", { itemId, itemType});
   };
 
   return (
@@ -52,7 +56,7 @@ const SearchDropdown = ({
           style={styles.input}
           value={searchQuery}
           onChangeText={handleChangeText}
-          placeholder="Search movies"
+          placeholder="Search movies and TV shows"
           placeholderTextColor="#aaa"
           onFocus={() => setIsFocus(true)}
         />
@@ -71,7 +75,7 @@ const SearchDropdown = ({
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.searchResult}
-              onPress={() => handleSelectMovie(item.id)}
+              onPress={() => handleSelectItem(item)}
             >
               <Image
                 style={styles.poster}

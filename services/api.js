@@ -16,6 +16,19 @@ export const fetchMoviesByCategory = async (category, page = 1) => {
   }
 };
 
+export const fetchTVShowsByCategory = async (category, page = 1) => {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/discover/tv?api_key=${API_KEY}&with_genres=${category}&sort_by=popularity.desc&page=${page}`
+    );
+    const data = await response.json();
+    return data.results;
+  } catch (error) {
+    console.error("Error fetching TV shows by category:", error);
+    return [];
+  }
+};
+
 export const searchAll = async (query, page = 1) => {
   try {
     const response = await fetch(
@@ -24,7 +37,7 @@ export const searchAll = async (query, page = 1) => {
       )}&page=${page}`
     );
     const data = await response.json();
-        // sort by popularity
+    // sort by popularity
     data.results.sort((a, b) => b.popularity - a.popularity);
     return data.results;
   } catch (error) {
@@ -58,6 +71,8 @@ export const searchTVShows = async (query, page = 1) => {
       )}&page=${page}`
     );
     const data = await response.json();
+    // sort by popularity
+    data.results.sort((a, b) => b.popularity - a.popularity);
     return data.results;
   } catch (error) {
     console.error("Error searching TV shows:", error);

@@ -8,25 +8,25 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-const MovieCarousel = ({ category, movies, navigation }) => {
-  const handleSelectMovie = (movieId) => {
-    navigation.navigate("Details", { movieId });
+const TelevisionCarousel = ({ category, shows, navigation }) => {
+  const handleSelectShow = (showId) => {
+    navigation.navigate("Details", { showId });
   };
 
   useEffect(() => {
-    console.log("movie carousel mounted");
+    console.log("tv carousel mounted");
   }, []);
 
-  const moviesWithImages = movies.filter((movie) => movie.poster_path);
+  const TVShowsWithImages = shows.filter((show) => show.poster_path);
 
   return (
     <View style={styles.carouselContainer}>
       <Text style={styles.carouselTitle}>{category}</Text>
       <FlatList
-        data={moviesWithImages}
+        data={TVShowsWithImages}
         horizontal
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handleSelectMovie(item.id)}>
+          <TouchableOpacity onPress={() => handleSelectShow(item.id)}>
             <View style={styles.card}>
               <Image
                 style={styles.poster}
@@ -86,4 +86,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MovieCarousel;
+export default TelevisionCarousel;

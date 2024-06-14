@@ -13,10 +13,6 @@ const MovieCarousel = ({ category, movies, navigation }) => {
     navigation.navigate("Details", { movieId });
   };
 
-  useEffect(() => {
-    console.log("movie carousel mounted");
-  }, []);
-
   const moviesWithImages = movies.filter((movie) => movie.poster_path);
 
   return (

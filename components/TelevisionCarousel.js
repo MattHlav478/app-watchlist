@@ -13,10 +13,6 @@ const TelevisionCarousel = ({ category, shows, navigation }) => {
     navigation.navigate("Details", { showId });
   };
 
-  useEffect(() => {
-    console.log("tv carousel mounted");
-  }, []);
-
   const TVShowsWithImages = shows.filter((show) => show.poster_path);
 
   return (

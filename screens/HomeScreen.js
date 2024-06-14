@@ -175,11 +175,12 @@ export default function HomeScreen({ navigation }) {
 
   useEffect(() => {
     fetchMovies();
-  }, []);
-
-  useEffect(() => {
     fetchTVShows();
   }, []);
+
+  // useEffect(() => {
+  //   fetchTVShows();
+  // }, []);
 
   return (
     <View style={styles.container}>

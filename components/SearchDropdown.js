@@ -42,7 +42,6 @@ const SearchDropdown = ({
   const handleSelectItem = (item) => {
     setSearchQuery("");
     setSearchResults([]);
-    set
     const itemId = item.id;
     const itemType = item.media_type;
     navigation.navigate("Details", { itemId, itemType});

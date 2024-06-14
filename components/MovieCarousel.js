@@ -9,8 +9,10 @@ import {
 } from "react-native";
 
 const MovieCarousel = ({ category, movies, navigation }) => {
-  const handleSelectMovie = (movieId) => {
-    navigation.navigate("Details", { movieId });
+  const handleSelectMovie = (item) => {
+    console.log("movie item", item)
+    const itemId = item.id;
+    navigation.navigate("Details", { itemId, itemType: "movie"});
   };
 
   const moviesWithImages = movies.filter((movie) => movie.poster_path);
@@ -22,7 +24,7 @@ const MovieCarousel = ({ category, movies, navigation }) => {
         data={moviesWithImages}
         horizontal
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handleSelectMovie(item.id)}>
+          <TouchableOpacity onPress={() => handleSelectMovie(item)}>
             <View style={styles.card}>
               <Image
                 style={styles.poster}

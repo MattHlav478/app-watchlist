@@ -23,7 +23,8 @@ export default function DetailsScreen({ route }) {
   const [newListName, setNewListName] = useState("");
   const [creatingNewList, setCreatingNewList] = useState(false);
 
-  const movieId = route.params.movieId;
+  const itemId = route.params.itemId; // Get movieId from route params which comes from navigation
+  const itemType = route.params.itemType; // Get itemType from route params which comes from navigation
   const {
     addToWatchList,
     removeFromWatchList,
@@ -34,12 +35,14 @@ export default function DetailsScreen({ route }) {
   const apiKey = process.env.EXPO_PUBLIC_TMDB_API_KEY;
 
   useEffect(() => {
+    console.log("itemType:", itemType);
     const fetchMovieDetails = async () => {
       try {
         const response = await fetch(
-          `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=en-US`
+          `https://api.themoviedb.org/3/${itemType}/${itemId}?api_key=${apiKey}&language=en-US`
         );
         const data = await response.json();
+        console.log("Movie/TV details:", data);
         setMovie(data);
       } catch (error) {
         console.error("Error fetching movie details:", error);
@@ -47,18 +50,18 @@ export default function DetailsScreen({ route }) {
     };
 
     fetchMovieDetails();
-  }, [movieId]);
+  }, [itemId]);
 
   useEffect(() => {
     if (watchLists) {
       const isMovieSaved = Object.values(watchLists).some((list) =>
-        list.some((item) => item.id === movieId)
+        list.some((item) => item.id === itemId)
       );
       setIsSaved(isMovieSaved);
     } else {
       console.error("watchLists is not an object:", watchLists);
     }
-  }, [watchLists, movieId]);
+  }, [watchLists, itemId]);
 
   if (!movie) {
     return (
@@ -127,54 +130,54 @@ export default function DetailsScreen({ route }) {
           movie={movie}
           isSaved={isSaved}
         >
-            <Text>Select List:</Text>
-            <Dropdown
-              style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              data={Object.keys(watchLists)
-                .map((listName) => ({
-                  label: listName,
-                  value: listName,
-                }))
-                .concat([{ label: "Add New List", value: "Add New List" }])}
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              placeholder={!isFocus ? "Select list" : "..."}
-              searchPlaceholder="Search..."
-              value={value}
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
-              onChange={(item) => {
-                setValue(item.value);
-                setCreatingNewList(item.value === "Add New List");
-                setIsFocus(false);
-              }}
+          <Text>Select List:</Text>
+          <Dropdown
+            style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            data={Object.keys(watchLists)
+              .map((listName) => ({
+                label: listName,
+                value: listName,
+              }))
+              .concat([{ label: "Add New List", value: "Add New List" }])}
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder={!isFocus ? "Select list" : "..."}
+            searchPlaceholder="Search..."
+            value={value}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            onChange={(item) => {
+              setValue(item.value);
+              setCreatingNewList(item.value === "Add New List");
+              setIsFocus(false);
+            }}
+          />
+          {creatingNewList && (
+            <TextInput
+              style={styles.input}
+              placeholder="Enter new list name"
+              value={newListName}
+              onChangeText={setNewListName}
             />
-            {creatingNewList && (
-              <TextInput
-                style={styles.input}
-                placeholder="Enter new list name"
-                value={newListName}
-                onChangeText={setNewListName}
-              />
-            )}
-            <View style={styles.buttonView}>
-              <TouchableOpacity
-                style={styles.modalSaveButton}
-                onPress={() => handleSaveButtonClick(value)}
-              >
-                <Text style={[styles.buttonText]}>Save</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={() => setModalOpen(false)}
-              >
-                <Text style={[styles.buttonText]}>Cancel</Text>
-              </TouchableOpacity>
-            </View>
+          )}
+          <View style={styles.buttonView}>
+            <TouchableOpacity
+              style={styles.modalSaveButton}
+              onPress={() => handleSaveButtonClick(value)}
+            >
+              <Text style={[styles.buttonText]}>Save</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalOpen(false)}
+            >
+              <Text style={[styles.buttonText]}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
         </OptionModal>
       )}
     </View>

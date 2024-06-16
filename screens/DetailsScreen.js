@@ -118,7 +118,16 @@ export default function DetailsScreen({ route }) {
 
       {modalOpen && (
         <OptionModal setModalOpen={setModalOpen} movie={item} isSaved={isSaved}>
-          <Text>Select List:</Text>
+          <Text
+            style={[
+              {
+                color: "#ffffff",
+                fontSize: 20,
+              },
+            ]}
+          >
+            Select List:
+          </Text>
           <Dropdown
             style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
             placeholderStyle={styles.placeholderStyle}
@@ -133,8 +142,8 @@ export default function DetailsScreen({ route }) {
             maxHeight={300}
             labelField="label"
             valueField="value"
+            // placeholder={watchLists[0]}
             placeholder={!isFocus ? "Select list" : "..."}
-            searchPlaceholder="Search..."
             value={value}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
@@ -145,12 +154,28 @@ export default function DetailsScreen({ route }) {
             }}
           />
           {creatingNewList && (
-            <TextInput
-              style={styles.input}
-              placeholder="Enter new list name"
-              value={newListName}
-              onChangeText={setNewListName}
-            />
+            <OptionModal>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter new list name"
+                value={newListName}
+                onChangeText={setNewListName}
+              />
+              <View style={styles.buttonView}>
+                <TouchableOpacity
+                  style={styles.modalSaveButton}
+                  onPress={() => handleSaveButtonClick(value)}
+                >
+                  <Text style={[styles.buttonText]}>Save</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={() => setModalOpen(false)}
+                >
+                  <Text style={[styles.buttonText]}>Cancel</Text>
+                </TouchableOpacity>
+              </View>
+            </OptionModal>
           )}
           <View style={styles.buttonView}>
             <TouchableOpacity
@@ -240,6 +265,7 @@ const styles = StyleSheet.create({
   buttonView: {
     flexDirection: "row",
     justifyContent: "space-around",
+    backgroundColor: "transparent",
     width: "90%",
   },
   modalSaveButton: {
@@ -301,6 +327,19 @@ const styles = StyleSheet.create({
   },
   inputSearchStyle: {
     height: 40,
+    fontSize: 16,
+  },
+  input: {
+    color: "#fff",
+    backgroundColor: "#2e2e38",
+    borderRadius: 5,
+    marginTop: 5,
+    marginBottom: 5,
+    marginHorizontal: 20,
+    paddingLeft: 10,
+    paddingRight: 10,
+    height: 40,
+    width: "90%",
     fontSize: 16,
   },
   // END Dropdown styles

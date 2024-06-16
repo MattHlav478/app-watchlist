@@ -16,7 +16,7 @@ export default function MovieDetails({ movie }) {
       <View style={styles.detailsContainer}>
         <Text style={styles.title}>{movie.title}</Text>
         <Text style={styles.releaseDate}>
-          Release Date: {movie.release_date}
+          Release Date: {movie.release_date ? movie.release_date : "N/A"}
         </Text>
         <Text style={styles.overview}>{movie.overview}</Text>
       </View>

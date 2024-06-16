@@ -178,10 +178,6 @@ export default function HomeScreen({ navigation }) {
     fetchTVShows();
   }, []);
 
-  // useEffect(() => {
-  //   fetchTVShows();
-  // }, []);
-
   return (
     <View style={styles.container}>
       <SearchDropdown
@@ -191,13 +187,32 @@ export default function HomeScreen({ navigation }) {
         setSearchResults={setSearchResults}
         navigation={navigation}
       />
-      <View style={styles.typeTabsContainer}>
-        <TouchableOpacity onPress={() => setTab("movies")}>
-          <Text style={styles.typeTabsText}>Movies</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setTab("television")}>
-          <Text style={styles.typeTabsText}>Television</Text>
-        </TouchableOpacity>
+      <View>
+        <View style={styles.typeTabsContainer}>
+          <TouchableOpacity onPress={() => setTab("movies")}>
+            <Text style={styles.typeTabsText}>Movies</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setTab("television")}>
+            <Text style={styles.typeTabsText}>Television</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.highlightContainer}>
+          <View
+            style={{
+              height: 10,
+              backgroundColor: tab === "movies" ? "#00adb5" : "transparent",
+              width: "50%",
+              // animate a slide in when the tab is activated
+            }}
+          ></View>
+          <View
+            style={{
+              height: 10,
+              backgroundColor: tab === "television" ? "#00adb5" : "transparent",
+              width: "50%",
+            }}
+          ></View>
+        </View>
       </View>
       <ScrollView style={styles.carouselsContainer}>
         {tab === "movies"
@@ -231,12 +246,19 @@ const styles = StyleSheet.create({
   typeTabsContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    padding: 10,
+    padding: 5,
     backgroundColor: "#1c1c2b",
   },
   typeTabsText: {
     color: "#ffffff",
     fontSize: 20,
+  },
+  highlightContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    paddingBottom: 10,
+    width: "100%",
+    backgroundColor: "#1c1c2b",
   },
   carouselsContainer: {
     backgroundColor: "#1c1c2b",

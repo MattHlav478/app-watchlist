@@ -44,7 +44,7 @@ const SearchDropdown = ({
     setSearchResults([]);
     const itemId = item.id;
     const itemType = item.media_type;
-    navigation.navigate("Details", { itemId, itemType});
+    navigation.navigate("Details", { itemId, itemType });
   };
 
   return (
@@ -82,10 +82,21 @@ const SearchDropdown = ({
                   uri: `https://image.tmdb.org/t/p/w200${item.poster_path}`,
                 }}
               />
-              <Text style={styles.title}>{item.title}</Text>
-              <Text style={styles.year}>
-                {new Date(item.release_date).getFullYear()}
-              </Text>
+              {item.media_type === "movie" ? (
+                <>
+                  <Text style={styles.title}>{item.title}</Text>
+                  <Text style={styles.year}>
+                    {new Date(item.release_date).getFullYear()}
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <Text style={styles.title}>{item.name}</Text>
+                  <Text style={styles.year}>{`${new Date(
+                    item.first_air_date
+                  ).getFullYear()}`}</Text>
+                </>
+              )}
             </TouchableOpacity>
           )}
           keyExtractor={(item) => String(item.id)}
@@ -138,8 +149,8 @@ const styles = StyleSheet.create({
     borderBottomColor: "#444",
   },
   poster: {
-    width: 50,
-    height: 75,
+    width: 100,
+    height: 150,
   },
   title: {
     flex: 1,

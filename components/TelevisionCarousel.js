@@ -34,7 +34,7 @@ const TelevisionCarousel = ({ category, shows, navigation }) => {
               />
               <Text style={styles.title}>{item.title}</Text>
               <Text style={styles.year}>
-                {new Date(item.release_date).getFullYear()}
+                {new Date(item.first_air_date).getFullYear()}
               </Text>
             </View>
           </TouchableOpacity>

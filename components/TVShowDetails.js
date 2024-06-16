@@ -16,7 +16,7 @@ export default function TVShowDetails({ show }) {
       <View style={styles.detailsContainer}>
         <Text style={styles.title}>{show.name}</Text>
         <Text style={styles.releaseDate}>
-          Release Date: {show.first_air_date}
+          Release Date: {show.first_air_date ? show.first_air_date : "N/A"}
         </Text>
         <Text style={styles.overview}>{show.overview}</Text>
       </View>

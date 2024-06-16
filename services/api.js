@@ -37,6 +37,10 @@ export const searchAll = async (query, page = 1) => {
       )}&page=${page}`
     );
     const data = await response.json();
+    // filter out items that aren't tv shows or movies
+    data.results = data.results.filter(
+      (item) => item.media_type === "tv" || item.media_type === "movie"
+    );
     // sort by popularity
     data.results.sort((a, b) => b.popularity - a.popularity);
     return data.results;

@@ -11,10 +11,12 @@ import {
 import { WatchListContext } from "../contexts/WatchListContext";
 
 import OptionModal from "../components/OptionModal";
+import MovieDetails from "../components/MovieDetails";
+import TVShowDetails from "../components/TVShowDetails";
 import { Dropdown } from "react-native-element-dropdown";
 
 export default function DetailsScreen({ route }) {
-  const [movie, setMovie] = useState(null);
+  const [item, setItem] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -44,7 +46,7 @@ export default function DetailsScreen({ route }) {
         );
         const data = await response.json();
         console.log("Movie/TV details:", data);
-        setMovie(data);
+        setItem(data);
       } catch (error) {
         console.error("Error fetching movie details:", error);
       }
@@ -64,7 +66,7 @@ export default function DetailsScreen({ route }) {
     }
   }, [watchLists, itemId]);
 
-  if (!movie) {
+  if (!item) {
     return (
       <View style={styles.container}>
         <Text style={styles.loadingText}>Loading...</Text>
@@ -75,38 +77,27 @@ export default function DetailsScreen({ route }) {
   const handleSaveButtonClick = async (listName) => {
     if (listName === "Add New List" && newListName.trim()) {
       createWatchList(newListName.trim());
-      addToWatchList(movie, newListName.trim());
+      addToWatchList(item, newListName.trim());
     } else {
-      addToWatchList(movie, listName);
+      addToWatchList(item, listName);
     }
     setIsSaved(true);
     setModalOpen(false);
   };
 
   const handleRemoveButtonClick = async () => {
-    removeFromWatchList(movie.id, value);
+    removeFromWatchList(item.id, value);
     setIsSaved(false);
   };
 
   return (
     <View style={styles.container}>
       <ScrollView>
-        <View style={styles.imageContainer}>
-          <Image
-            source={{
-              uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-            }}
-            style={styles.image}
-            resizeMode="contain"
-          />
-        </View>
-        <View style={styles.detailsContainer}>
-          <Text style={styles.title}>{movie.title}</Text>
-          <Text style={styles.releaseDate}>
-            Release Date: {movie.release_date}
-          </Text>
-          <Text style={styles.overview}>{movie.overview}</Text>
-        </View>
+        {item.media_type === "movie" ? (
+          <MovieDetails movie={item} />
+        ) : (
+          <TVShowDetails show={item} />
+        )}
       </ScrollView>
 
       {isSaved ? (
@@ -126,11 +117,7 @@ export default function DetailsScreen({ route }) {
       )}
 
       {modalOpen && (
-        <OptionModal
-          setModalOpen={setModalOpen}
-          movie={movie}
-          isSaved={isSaved}
-        >
+        <OptionModal setModalOpen={setModalOpen} movie={item} isSaved={isSaved}>
           <Text>Select List:</Text>
           <Dropdown
             style={[styles.dropdown, isFocus && { borderColor: "blue" }]}

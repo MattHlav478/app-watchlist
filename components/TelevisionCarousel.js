@@ -32,9 +32,10 @@ const TelevisionCarousel = ({ category, shows, navigation }) => {
                   uri: `https://image.tmdb.org/t/p/w200${item.poster_path}`,
                 }}
               />
-              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.title}>{item.name}</Text>
               <Text style={styles.year}>
-                {new Date(item.first_air_date).getFullYear()}
+                {new Date(item.first_air_date).getFullYear()} -
+                {item.last_air_date && new Date(item.last_air_date).getFullYear()}
               </Text>
             </View>
           </TouchableOpacity>

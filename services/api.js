@@ -9,6 +9,7 @@ export const fetchMoviesByCategory = async (category, page = 1) => {
       }&include_adult=false&include_video=false&page=${page}`
     );
     const data = await response.json();
+
     return data.results;
   } catch (error) {
     console.error("Error fetching movies by category:", error);
@@ -28,7 +29,6 @@ export const fetchTVShowsByCategory = async (category, page = 1) => {
     return [];
   }
 };
-
 export const searchAll = async (query, page = 1) => {
   try {
     const response = await fetch(
@@ -84,15 +84,15 @@ export const searchTVShows = async (query, page = 1) => {
   }
 };
 
-export const fetchMovieDetails = async (movieId) => {
-  try {
-    const response = await fetch(
-      `${API_BASE_URL}/movie/${movieId}?api_key=${API_KEY}`
-    );
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching movie details:", error);
-    return null;
-  }
-};
+// export const fetchMovieDetails = async (movieId) => {
+//   try {
+//     const response = await fetch(
+//       `${API_BASE_URL}/movie/${movieId}?api_key=${API_KEY}`
+//     );
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error("Error fetching movie details:", error);
+//     return null;
+//   }
+// };

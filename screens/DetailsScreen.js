@@ -39,7 +39,7 @@ export default function DetailsScreen({ route }) {
   useEffect(() => {
     console.log("itemType:", itemType);
     console.log("itemId:", itemId);
-    const fetchMovieDetails = async () => {
+    const fetchMovieOrShowDetails = async () => {
       try {
         const response = await fetch(
           `https://api.themoviedb.org/3/${itemType}/${itemId}?api_key=${apiKey}&language=en-US`
@@ -47,12 +47,14 @@ export default function DetailsScreen({ route }) {
         const data = await response.json();
         console.log("Movie/TV details:", data);
         setItem(data);
+        return data;
       } catch (error) {
         console.error("Error fetching movie details:", error);
       }
     };
-
-    fetchMovieDetails();
+    // let itemInfo = fetchMovieOrShowDetails();
+    // setItem(itemInfo);
+    // console.log("itemInfo:", itemInfo);
   }, [itemId]);
 
   useEffect(() => {

@@ -72,11 +72,19 @@ export default function HomeScreen({ navigation }) {
     ];
 
     const promises = categories.map(async (category) => {
-      const movies = await fetchMoviesByCategory(category.id);
+      let movies = await fetchMoviesByCategory(category.id);
+      // filter movies so that only movies first genre matches the category id
+      movies = movies.filter(
+        (movie) =>
+          // movie.genres &&
+          // movie.genres.length > 0 &&
+          movie.genre_ids[0] === category.id ||
+          movie.genre_ids[1] === category.id
+      );
       return {
         ...category,
         // Get the 10 most recent movies and sort by popularity
-        movies: movies.sort((a, b) => b.popularity - a.popularity).slice(0, 10),
+        movies: movies.sort((a, b) => b.popularity - a.popularity).slice(0, 50),
       };
     });
 
@@ -157,7 +165,15 @@ export default function HomeScreen({ navigation }) {
     ];
 
     const promises = categories.map(async (category) => {
-      const shows = await fetchTVShowsByCategory(category.id);
+      let shows = await fetchTVShowsByCategory(category.id);
+      console.log("shows", shows);
+      // filter shows so that only shows first genre matches the category id
+      shows = shows.filter(
+        (show) =>
+          // show.genres &&
+          // show.genres.length > 0 &&
+          show.genre_ids[0] === category.id || show.genre_ids[1] === category.id
+      );
       return {
         ...category,
         // Get the 10 most recent shows and sort by popularity
@@ -200,16 +216,9 @@ export default function HomeScreen({ navigation }) {
           <View
             style={{
               height: 10,
-              backgroundColor: tab === "movies" ? "#00adb5" : "transparent",
+              backgroundColor: "#00adb5",
               width: "50%",
-              // animate a slide in when the tab is activated
-            }}
-          ></View>
-          <View
-            style={{
-              height: 10,
-              backgroundColor: tab === "television" ? "#00adb5" : "transparent",
-              width: "50%",
+              transform: [{ translateX: tab === "movies" ? -100 : 100 }],
             }}
           ></View>
         </View>

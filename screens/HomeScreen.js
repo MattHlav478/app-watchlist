@@ -166,7 +166,7 @@ export default function HomeScreen({ navigation }) {
 
     const promises = categories.map(async (category) => {
       let shows = await fetchTVShowsByCategory(category.id);
-      console.log("shows", shows);
+      // console.log("shows", shows);
       // filter shows so that only shows first genre matches the category id
       shows = shows.filter(
         (show) =>

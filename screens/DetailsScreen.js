@@ -52,8 +52,8 @@ export default function DetailsScreen({ route }) {
         console.error("Error fetching movie details:", error);
       }
     };
-    // let itemInfo = fetchMovieOrShowDetails();
-    // setItem(itemInfo);
+    let itemInfo = fetchMovieOrShowDetails();
+    setItem(itemInfo);
     // console.log("itemInfo:", itemInfo);
   }, [itemId]);
 

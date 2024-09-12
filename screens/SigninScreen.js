@@ -8,7 +8,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
-import { handleSignIn } from "../scripts/userAuth";
+import { handleSignIn, handlePasswordReset } from "../scripts/userAuth";
 import { auth, db } from "../services/firebaseConnection";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomModal from "../components/CustomModal";
@@ -23,6 +23,7 @@ export default function SignInScreen({
   const { userFormData, setUserFormData } = useContext(UserFormContext);
   const [error, setError] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen2, setModalOpen2] = useState(false);
 
   useEffect(() => {
     if (AsyncStorage.getItem("email") && AsyncStorage.getItem("password")) {
@@ -34,6 +35,10 @@ export default function SignInScreen({
       setUserFormData({ email: "", password: "" });
     }
   }, []);
+
+  useEffect(() => {
+    console.log(`modalOpen2: ${modalOpen2}`);
+  }, [modalOpen2]);
 
   const handleInputChange = (name, value) => {
     setUserFormData({ ...userFormData, [name]: value });
@@ -55,6 +60,12 @@ export default function SignInScreen({
       console.error(`sign in error: ${error}`);
       // setError(error.code);
     }
+  };
+
+  const doResetStuff = async (email) => {
+    handlePasswordReset(email);
+    setModalOpen(false);
+    setModalOpen2(true);
   };
 
   return (
@@ -94,12 +105,11 @@ export default function SignInScreen({
         >
           <Text style={styles.buttonText}>Forgot Password?</Text>
         </TouchableOpacity>
-
         {modalOpen && (
           <OptionModal
-            // setModalOpen={setModalOpen}
-            // userFormData={userFormData}
-            // handleInputChange={handleInputChange}
+          // setModalOpen={setModalOpen}
+          // userFormData={userFormData}
+          // handleInputChange={handleInputChange}
           >
             <TextInput
               style={styles.pwResetInput}
@@ -113,9 +123,7 @@ export default function SignInScreen({
             <View style={styles.buttonView}>
               <TouchableOpacity
                 style={styles.resetButton}
-                onPress={() =>
-                  handlePasswordReset(userFormData.email) && setModalOpen(false)
-                }
+                onPress={() => doResetStuff(userFormData.email)}
               >
                 <Text style={[styles.buttonText]}>Submit</Text>
               </TouchableOpacity>
@@ -126,6 +134,19 @@ export default function SignInScreen({
                 <Text style={[styles.buttonText]}>Cancel</Text>
               </TouchableOpacity>
             </View>
+          </OptionModal>
+        )}
+        {modalOpen2 && (
+          <OptionModal>
+            <Text style={styles.text}>
+              Password reset email sent successfully!
+            </Text>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalOpen2(false)}
+            >
+              <Text style={[styles.buttonText]}>Close</Text>
+            </TouchableOpacity>
           </OptionModal>
         )}
       </View>

@@ -73,6 +73,7 @@ export const handleSignOut = async () => {
 export const handlePasswordReset = async (email) => {
   try {
     await sendPasswordResetEmail(auth, email);
+    console.log("Password reset email sent successfully!");
     return true;
   } catch (error) {
     return false;

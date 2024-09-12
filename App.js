@@ -137,7 +137,7 @@ export default function App() {
                         color={color}
                         size={size}
                       />
-                    ),
+                    ),  
                   }}
                 />
               </Tab.Navigator>

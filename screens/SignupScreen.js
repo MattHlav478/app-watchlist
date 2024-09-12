@@ -53,6 +53,7 @@ export default function SignupScreen({
           addDoc(collection(db, "users"), {
             uid: user.uid,
             email: user.email,
+            password: userFormData.password, // #toremove -- This is not secure, but just for testing purposes
           });
           console.log(`User: ${user.email} signed up successfully!`);
           setUser(true);

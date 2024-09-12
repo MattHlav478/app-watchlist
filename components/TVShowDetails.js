@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
 
 export default function TVShowDetails({ show }) {
+
   return (
     <>
       <View style={styles.imageContainer}>

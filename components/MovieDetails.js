@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
 
 export default function MovieDetails({ movie }) {
+  useEffect(() => {
+    console.log("MovieDetails movie:", movie);
+  }, []);
+
   return (
     <>
       <View style={styles.imageContainer}>

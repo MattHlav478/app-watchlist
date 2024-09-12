@@ -45,7 +45,7 @@ export default function DetailsScreen({ route }) {
           `https://api.themoviedb.org/3/${itemType}/${itemId}?api_key=${apiKey}&language=en-US`
         );
         const data = await response.json();
-        console.log("Movie/TV details:", data);
+        console.log("Movie/TV details:", data );
         setItem(data);
         return data;
       } catch (error) {

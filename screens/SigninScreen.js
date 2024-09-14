@@ -40,10 +40,6 @@ export default function SignInScreen({
     }
   }, []);
 
-  useEffect(() => {
-    console.log(`modalOpen2: ${modalOpen2}`);
-  }, [modalOpen2]);
-
   const handleInputChange = (name, value) => {
     setUserFormData({ ...userFormData, [name]: value });
     // console.log(userFormData);

@@ -38,7 +38,8 @@ export const handleSignUp = async (email, password) => {
 
 export const handleSignIn = async (email, password) => {
   try {
-    await signInWithEmailAndPassword(auth, email, password);
+    signInWithEmailAndPassword(auth, email, password);
+    console.log(auth)
     // After signing in, save the sign-in status to AsyncStorage
     try {
       const idToken = await auth.currentUser.getIdToken();
@@ -46,6 +47,7 @@ export const handleSignIn = async (email, password) => {
       await AsyncStorage.setItem("email", email);
       await AsyncStorage.setItem("password", password);
     } catch (error) {
+      console.log(error);
       if (error.code === "auth/missing-password") {
         return { error: "Password is required to sign in" };
       } else if (error.code === "auth/missing-email") {
@@ -57,6 +59,20 @@ export const handleSignIn = async (email, password) => {
     return { error: null }; // Add this line
   } catch (error) {
     return { error: error.message };
+  }
+};
+
+export const handleSignIn2 = async (email, password) => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    await AsyncStorage.setItem("firebaseAuthToken", user.accessToken);
+    await AsyncStorage.setItem("email", email);
+    await AsyncStorage.setItem("password", password);
+    return { error: null }; // Return an object with error set to null on success
+  } catch (error) {
+    console.log(`errorasdf ${error.code}`);
+    return { error: error.code }; // Return an object with the error message
   }
 };
 

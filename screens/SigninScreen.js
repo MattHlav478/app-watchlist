@@ -8,7 +8,11 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
-import { handleSignIn, handlePasswordReset } from "../scripts/userAuth";
+import {
+  handleSignIn,
+  handleSignIn2,
+  handlePasswordReset,
+} from "../scripts/userAuth";
 import { auth, db } from "../services/firebaseConnection";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomModal from "../components/CustomModal";
@@ -21,7 +25,7 @@ export default function SignInScreen({
   UserFormContext,
 }) {
   const { userFormData, setUserFormData } = useContext(UserFormContext);
-  const [error, setError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [modalOpen2, setModalOpen2] = useState(false);
 
@@ -45,20 +49,59 @@ export default function SignInScreen({
     // console.log(userFormData);
   };
 
-  const handleSubmit = async (e) => {
-    // e.preventDefault();
+  const handleSubmit = async () => {
     try {
-      await handleSignIn(userFormData.email, userFormData.password);
-      // After sign-in is successful, navigate to another screen
-      auth.onAuthStateChanged(function (user) {
-        if (user) {
-          // console.log(`User: ${user.email} signed in successfully!`);
-          setUser(true);
+      const result = await handleSignIn2(
+        userFormData.email,
+        userFormData.password
+      );
+      if (result.error) {
+        console.log(`Error: ${result.error}`);
+        if (
+          result.error ===
+          "auth/invalid-value-(email),-starting-an-object-on-a-scalar-field-invalid-value-(password),-starting-an-object-on-a-scalar-field"
+        ) {
+          setErrorMessage("Email does not exist");
         }
-      });
+        if (result.error === "auth/missing-email") {
+          setErrorMessage("Email is required to sign in");
+        }
+        if (result.error === "auth/missing-password") {
+          setErrorMessage("Password is required to sign in");
+        }
+        if (result.error === "auth/user-not-found") {
+          setErrorMessage("User not found");
+        }
+        if (result.error === "auth/wrong-password") {
+          setErrorMessage("Incorrect password");
+        }
+        if (
+          result.error ===
+          "auth/invalid-value-(password),-starting-an-object-on-a-scalar-field"
+        ) {
+          setErrorMessage("Invalid password");
+        }
+        if (result.error === "auth/too-many-requests") {
+          setErrorMessage("Too many requests. Try again later.");
+        }
+        if (result.error === "auth/invalid-login-credentials") {
+          setErrorMessage("Invalid login credentials");
+        }
+        if (result.error === "aauth/invalid-email") {
+          setErrorMessage("Invalid email");
+        }
+      } else {
+        // After sign-in is successful, navigate to another screen
+        auth.onAuthStateChanged(function (user) {
+          if (user) {
+            console.log(`User: ${user.email} signed in successfully!`);
+            setUser(true);
+          }
+        });
+      }
     } catch (error) {
       console.error(`sign in error: ${error}`);
-      // setError(error.code);
+      setErrorMessage(error.message);
     }
   };
 
@@ -88,7 +131,9 @@ export default function SignInScreen({
           onChangeText={(text) => handleInputChange("password", text)}
           required
         />
-        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+        {errorMessage ? (
+          <Text style={styles.errorText}>{errorMessage}</Text>
+        ) : null}
         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Submit</Text>
         </TouchableOpacity>

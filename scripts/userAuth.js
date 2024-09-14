@@ -47,7 +47,7 @@ export const handleSignIn = async (email, password) => {
       await AsyncStorage.setItem("email", email);
       await AsyncStorage.setItem("password", password);
     } catch (error) {
-      // console.log(errrror);
+      // console.log(error);
       if (error.code === "auth/missing-password") {
         return { error: "Password is required to sign in" };
       } else if (error.code === "auth/missing-email") {

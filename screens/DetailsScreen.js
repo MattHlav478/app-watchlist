@@ -95,7 +95,7 @@ export default function DetailsScreen({ route }) {
   return (
     <View style={styles.container}>
       <ScrollView>
-        {item.media_type === "movie" ? (
+        {itemType === "movie" ? (
           <MovieDetails movie={item} />
         ) : (
           <TVShowDetails show={item} />

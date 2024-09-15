@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
+import moment from "moment";
 
 export default function MovieDetails({ movie }) {
   useEffect(() => {
-    console.log("MovieDetails movie:", movie);
+    // console.log("MovieDetails movie:", movie.release_date);
   }, []);
 
   return (
@@ -20,7 +21,10 @@ export default function MovieDetails({ movie }) {
       <View style={styles.detailsContainer}>
         <Text style={styles.title}>{movie.title}</Text>
         <Text style={styles.releaseDate}>
-          Release Date: {movie.release_date ? movie.release_date : "N/A"}
+          Release Date:{" "}
+          {movie.release_date
+            ? moment(movie.release_date).format("M/D/YYYY")
+            : "N/A"}
         </Text>
         <Text style={styles.overview}>{movie.overview}</Text>
       </View>

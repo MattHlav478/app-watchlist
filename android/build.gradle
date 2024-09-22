@@ -1,0 +1,44 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext {
+        buildToolsVersion = findProperty('android.buildToolsVersion') ?: '34.0.0'
+        minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '23')
+//        compileSdkVersion = findProperty('android.compileSdkVersion') ?: '34'
+        compileSdkVersion = 34
+        targetSdkVersion = Integer.parseInt(findProperty('android.targetSdkVersion') ?: '34')
+        kotlinVersion = findProperty('android.kotlinVersion') ?: '1.9.23'
+
+        ndkVersion = "26.1.10909125"
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath('com.android.tools.build:gradle:8.6.0') // This is fine for Gradle 8.7 and Expo SDK 51.
+        classpath('com.facebook.react:react-native-gradle-plugin')
+        classpath('org.jetbrains.kotlin:kotlin-gradle-plugin')
+    }
+}
+
+apply plugin: "com.facebook.react.rootproject"
+
+allprojects {
+    repositories {
+        // Replacing dynamic file resolution for 'react-native' with a static path reference
+        // url(new File(['node', '--print', "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim(), '../android'))
+        maven { url("$rootDir/../node_modules/react-native/android") }
+
+        // Replacing dynamic file resolution for 'jsc-android' with a static path reference
+        // url(new File(['node', '--print', "require.resolve('jsc-android/package.json', { paths: [require.resolve('react-native/package.json')] })"].execute(null, rootDir).text.trim(), '../dist'))
+        maven { url("$rootDir/../node_modules/jsc-android/dist") }
+
+        // Keeping Google and Maven Central for standard dependencies
+        google()
+        mavenCentral()
+
+        // JitPack is still relevant for certain dependencies fetched from GitHub
+        maven { url 'https://www.jitpack.io' }
+    }
+}

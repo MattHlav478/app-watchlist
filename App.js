@@ -40,7 +40,7 @@ export default function App() {
   const [userInitial, setUserInitial] = useState("!");
 
   useEffect(() => {
-    const checkSignInStatus = async () => {
+     const checkSignInStatus = async () => {
       try {
         const email = await AsyncStorage.getItem("email");
         const password = await AsyncStorage.getItem("password");
@@ -137,7 +137,7 @@ export default function App() {
                         color={color}
                         size={size}
                       />
-                    ),
+                    ),  
                   }}
                 />
               </Tab.Navigator>
@@ -210,7 +210,10 @@ function UserListStackScreen() {
         tabBarInactiveTintColor: "ffffff",
       }}
     >
-      <UserListStack.Screen name="UserList" component={UserListScreen} />
+      <UserListStack.Screen
+        name="UserList"
+        component={UserListScreen}
+      />
       <UserListStack.Screen name="Details" component={DetailsScreen} />
     </UserListStack.Navigator>
   );

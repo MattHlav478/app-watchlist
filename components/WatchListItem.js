@@ -1,15 +1,23 @@
-import React from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+import React from "react";
+import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 
-const WatchListItem = ({ movie, onPress, onRemove }) => {
+const WatchListItem = ({ movie, navigation, onRemove }) => {
+  const handleNavigate = (movie) => {
+    const itemId = movie.id;
+    navigation.navigate("Details", { itemId, itemType: "movie" });
+  };
+
   return (
     <View style={styles.container}>
-      <Image
-        source={{
-          uri: `https://image.tmdb.org/t/p/w300${movie.poster_path}`,
-        }}
-        style={styles.image}
-      />
+      <TouchableOpacity onPress={() => handleNavigate(movie)}>
+        <Image
+          source={{
+            uri: `https://image.tmdb.org/t/p/w300${movie.poster_path}`,
+          }}
+          style={styles.image}
+        />
+      </TouchableOpacity>
+
       <View style={styles.detailsContainer}>
         <Text style={styles.title}>{movie.title}</Text>
         <Text style={styles.releaseDate}>
@@ -26,10 +34,10 @@ const WatchListItem = ({ movie, onPress, onRemove }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#1c1c2b',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#1c1c2b",
     padding: 10,
     marginBottom: 10,
   },
@@ -42,25 +50,25 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   title: {
-    color: '#ffffff',
+    color: "#ffffff",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   releaseDate: {
-    color: '#ffffff',
+    color: "#ffffff",
     fontSize: 16,
   },
   runtime: {
-    color: '#ffffff',
+    color: "#ffffff",
     fontSize: 16,
   },
   removeButton: {
-    backgroundColor: '#ff4757',
+    backgroundColor: "#ff4757",
     padding: 10,
     borderRadius: 10,
   },
   removeButtonText: {
-    color: '#ffffff',
+    color: "#ffffff",
     fontSize: 16,
   },
 });

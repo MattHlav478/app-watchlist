@@ -20,6 +20,8 @@ export default function DetailsScreen({ route }) {
   const [isSaved, setIsSaved] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
+  const [currentMovieWatchlist, setCurrentMovieWatchlist] = useState([]);
+
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
   const [newListName, setNewListName] = useState("");
@@ -27,12 +29,8 @@ export default function DetailsScreen({ route }) {
 
   const itemId = route.params.itemId; // Get movieId from route params which comes from navigation
   const itemType = route.params.itemType; // Get itemType from route params which comes from navigation
-  const {
-    addToWatchList,
-    removeFromWatchList,
-    createWatchList,
-    watchLists,
-  } = useContext(WatchListContext);
+  const { addToWatchList, removeFromWatchList, createWatchList, watchLists } =
+    useContext(WatchListContext);
 
   const apiKey = process.env.EXPO_PUBLIC_TMDB_API_KEY;
 
@@ -45,7 +43,7 @@ export default function DetailsScreen({ route }) {
           `https://api.themoviedb.org/3/${itemType}/${itemId}?api_key=${apiKey}&language=en-US`
         );
         const data = await response.json();
-        console.log("Movie/TV details:", data );
+        // console.log("Movie/TV details:", data);
         setItem(data);
         return data;
       } catch (error) {
@@ -63,6 +61,13 @@ export default function DetailsScreen({ route }) {
         list.some((item) => item.id === itemId)
       );
       setIsSaved(isMovieSaved);
+      // console.log the watchlist with this movie on it
+      console.log("isMovieSaved:", isMovieSaved);
+      const currentWatchlist = Object.keys(watchLists).filter((list) =>
+        watchLists[list].some((item) => item.id === itemId)
+      );
+      setCurrentMovieWatchlist(currentWatchlist);
+      console.log("Saved movie is on this list:", currentMovieWatchlist);
     } else {
       console.error("watchLists is not an object:", watchLists);
     }
@@ -87,8 +92,8 @@ export default function DetailsScreen({ route }) {
     setModalOpen(false);
   };
 
-  const handleRemoveButtonClick = async () => {
-    removeFromWatchList(item.id, value);
+  const handleRemoveButtonClick = async (listname) => {
+    removeFromWatchList(item.id, listname);
     setIsSaved(false);
   };
 
@@ -103,12 +108,25 @@ export default function DetailsScreen({ route }) {
       </ScrollView>
 
       {isSaved ? (
-        <TouchableOpacity
-          style={styles.removeButton}
-          onPress={handleRemoveButtonClick}
-        >
-          <Text style={styles.saveButtonText}>Remove from WatchList</Text>
-        </TouchableOpacity>
+        <>
+          {currentMovieWatchlist.map((listName) => (
+            <TouchableOpacity
+              key={listName}
+              style={styles.removeButton}
+              onPress={() => handleRemoveButtonClick(listName)}
+            >
+              <Text
+                style={styles.saveButtonText}
+              >{`Remove from ${listName}`}</Text>
+            </TouchableOpacity>
+          ))}
+          <TouchableOpacity
+            style={styles.saveButton}
+            onPress={() => setModalOpen(true)}
+            >
+            <Text style={styles.saveButtonText}>Save to another watchlist</Text>
+          </TouchableOpacity>
+        </>
       ) : (
         <TouchableOpacity
           style={styles.saveButton}

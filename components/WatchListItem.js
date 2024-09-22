@@ -17,14 +17,16 @@ const WatchListItem = ({ movie, navigation, onRemove }) => {
           style={styles.image}
         />
       </TouchableOpacity>
+      <TouchableOpacity onPress={() => handleNavigate(movie)}>
+        <View style={styles.detailsContainer}>
+          <Text style={styles.title}>{movie.title}</Text>
+          <Text style={styles.releaseDate}>
+            Release Date: {movie.release_date}
+          </Text>
+          <Text style={styles.runtime}>Runtime: {movie.runtime} min</Text>
+        </View>
+      </TouchableOpacity>
 
-      <View style={styles.detailsContainer}>
-        <Text style={styles.title}>{movie.title}</Text>
-        <Text style={styles.releaseDate}>
-          Release Date: {movie.release_date}
-        </Text>
-        <Text style={styles.runtime}>Runtime: {movie.runtime} min</Text>
-      </View>
       <TouchableOpacity style={styles.removeButton} onPress={onRemove}>
         <Text style={styles.removeButtonText}>Remove</Text>
       </TouchableOpacity>

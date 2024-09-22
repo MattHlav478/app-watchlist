@@ -10,7 +10,7 @@ import {
 
 const MovieCarousel = ({ category, movies, navigation }) => {
   const handleSelectMovie = (item) => {
-    console.log("movie item", item)
+    // console.log("movie item", item)
     const itemId = item.id;
     navigation.navigate("Details", { itemId, itemType: "movie"});
   };

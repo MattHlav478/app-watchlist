@@ -35,8 +35,8 @@ export default function DetailsScreen({ route }) {
   const apiKey = process.env.EXPO_PUBLIC_TMDB_API_KEY;
 
   useEffect(() => {
-    console.log("itemType:", itemType);
-    console.log("itemId:", itemId);
+    // console.log("itemType:", itemType);
+    // console.log("itemId:", itemId);
     const fetchMovieOrShowDetails = async () => {
       try {
         const response = await fetch(
@@ -62,12 +62,11 @@ export default function DetailsScreen({ route }) {
       );
       setIsSaved(isMovieSaved);
       // console.log the watchlist with this movie on it
-      console.log("isMovieSaved:", isMovieSaved);
+      // console.log("isMovieSaved:", isMovieSaved);
       const currentWatchlist = Object.keys(watchLists).filter((list) =>
         watchLists[list].some((item) => item.id === itemId)
       );
       setCurrentMovieWatchlist(currentWatchlist);
-      console.log("Saved movie is on this list:", currentMovieWatchlist);
     } else {
       console.error("watchLists is not an object:", watchLists);
     }

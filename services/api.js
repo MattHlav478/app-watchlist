@@ -1,3 +1,5 @@
+// import { EXPO_PUBLIC_TMDB_API_KEY } from '@env';
+// const API_KEY = EXPO_PUBLIC_TMDB_API_KEY;
 const API_KEY = process.env.EXPO_PUBLIC_TMDB_API_KEY;
 const API_BASE_URL = "https://api.themoviedb.org/3";
 

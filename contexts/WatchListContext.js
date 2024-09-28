@@ -31,7 +31,7 @@ export const WatchListProvider = ({ children }) => {
         let userMovieLists = userDoc.exists()
           ? userDoc.data().watchLists
           : {};
-        console.log("User movie lists:", Object.keys(userMovieLists).length);
+        console.log("User movie lists:", Object.keys(userMovieLists));
         if (Object.keys(userMovieLists).length === 0) {
           userMovieLists = { Default: [] };
           setDoc(doc(db, "movies", user.email), { watchLists: userMovieLists });

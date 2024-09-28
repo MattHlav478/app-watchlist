@@ -25,7 +25,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.lavat478.snack5dbfb7365c6b4ba5bdfc0bc1f7fc2c74"
     },
     "web": {
       "bundler": "metro",

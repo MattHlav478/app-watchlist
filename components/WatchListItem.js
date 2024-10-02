@@ -20,13 +20,11 @@ const WatchListItem = ({ movie, navigation, onRemove }) => {
       <TouchableOpacity onPress={() => handleNavigate(movie)}>
         <View style={styles.detailsContainer}>
           <Text style={styles.title}>{movie.title}</Text>
-          <Text style={styles.releaseDate}>
-            Release Date: {movie.release_date}
-          </Text>
+          <Text style={styles.releaseDate}>Release Date:</Text>
+          <Text style={styles.releaseDate}>{movie.release_date}</Text>
           <Text style={styles.runtime}>Runtime: {movie.runtime} min</Text>
         </View>
       </TouchableOpacity>
-
       <TouchableOpacity style={styles.removeButton} onPress={onRemove}>
         <Text style={styles.removeButtonText}>Remove</Text>
       </TouchableOpacity>
@@ -40,6 +38,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: "#1c1c2b",
+    // backgroundColor: "red",
     padding: 10,
     marginBottom: 10,
   },
@@ -49,7 +48,8 @@ const styles = StyleSheet.create({
   },
   detailsContainer: {
     flex: 1,
-    marginLeft: 10,
+    marginLeft: 5,
+    // backgroundColor: 'blue',
   },
   title: {
     color: "#ffffff",
@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
   runtime: {
     color: "#ffffff",
     fontSize: 16,
+    paddingTop: 10,
   },
   removeButton: {
     backgroundColor: "#ff4757",

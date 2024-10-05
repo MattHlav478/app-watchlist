@@ -24,13 +24,17 @@ export default function DetailsScreen({ route }) {
 
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
-  const [newListName, setNewListName] = useState("");
+  const [newListName, setNewListName] = useState(null);
   const [creatingNewList, setCreatingNewList] = useState(false);
 
   const itemId = route.params.itemId; // Get movieId from route params which comes from navigation
   const itemType = route.params.itemType; // Get itemType from route params which comes from navigation
-  const { addToWatchList, removeFromWatchList, createWatchList, watchLists } =
-    useContext(WatchListContext);
+  const {
+    addToWatchList,
+    removeFromWatchList,
+    createWatchList,
+    watchLists,
+  } = useContext(WatchListContext);
 
   const apiKey = process.env.EXPO_PUBLIC_TMDB_API_KEY;
 
@@ -81,7 +85,10 @@ export default function DetailsScreen({ route }) {
   }
 
   const handleSaveButtonClick = async (listName) => {
-    if (listName === "Add New List" && newListName.trim()) {
+    console.log("listName:", listName);
+    if (listName == null) {
+      console.log("No list name entered");
+    } else if (listName === "Add New List" && newListName.trim()) {
       createWatchList(newListName.trim());
       addToWatchList(item, newListName.trim());
     } else {
@@ -122,8 +129,8 @@ export default function DetailsScreen({ route }) {
           <TouchableOpacity
             style={styles.saveButton}
             onPress={() => setModalOpen(true)}
-            >
-            <Text style={styles.saveButtonText}>Save to another watchlist</Text>
+          >
+            <Text style={styles.saveButtonText}>Add</Text>
           </TouchableOpacity>
         </>
       ) : (
@@ -131,7 +138,7 @@ export default function DetailsScreen({ route }) {
           style={styles.saveButton}
           onPress={() => setModalOpen(true)}
         >
-          <Text style={styles.saveButtonText}>Save to WatchList</Text>
+          <Text style={styles.saveButtonText}>Add</Text>
         </TouchableOpacity>
       )}
 
@@ -167,9 +174,13 @@ export default function DetailsScreen({ route }) {
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onChange={(item) => {
-              setValue(item.value);
-              setCreatingNewList(item.value === "Add New List");
-              setIsFocus(false);
+              if (item.value === "Select List") {
+                return;
+              } else {
+                setValue(item.value);
+                setCreatingNewList(item.value === "Add New List");
+                setIsFocus(false);
+              }
             }}
           />
           {creatingNewList && (

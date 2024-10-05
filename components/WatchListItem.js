@@ -1,10 +1,15 @@
 import React from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
+import CustomModal from "./CustomModal";
 
 const WatchListItem = ({ movie, navigation, onRemove }) => {
   const handleNavigate = (movie) => {
     const itemId = movie.id;
     navigation.navigate("Details", { itemId, itemType: "movie" });
+  };
+
+  const onEllipse = () => {
+    console.log("onEllipse");
   };
 
   return (
@@ -25,8 +30,11 @@ const WatchListItem = ({ movie, navigation, onRemove }) => {
           <Text style={styles.runtime}>Runtime: {movie.runtime} min</Text>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.removeButton} onPress={onRemove}>
+      {/* <TouchableOpacity style={styles.removeButton} onPress={onRemove}>
         <Text style={styles.removeButtonText}>Remove</Text>
+      </TouchableOpacity> */}
+      <TouchableOpacity style={styles.ellipseButton} onPress={onEllipse}>
+        <Text style={styles.ellipseButton}>...</Text>
       </TouchableOpacity>
     </View>
   );
@@ -71,6 +79,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   removeButtonText: {
+    color: "#ffffff",
+    fontSize: 16,
+  },
+  ellipseButton: {
+    backgroundColor: "#00adb5",
+    padding: 10,
+    borderRadius: 10,
+  },
+  ellipseButtonText: {
     color: "#ffffff",
     fontSize: 16,
   },

@@ -71,8 +71,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    width: "100%",
-    height: "100%",
+    width: "50%",
+    height: "50%",
     backgroundColor: "#1c1c2b",
     justifyContent: "center", // Center the content vertically
     alignItems: "center", // Center the content horizontally

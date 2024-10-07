@@ -19,6 +19,7 @@ export default function DetailsScreen({ route }) {
   const [item, setItem] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [removeModalOpen, setRemoveModalOpen] = useState(false);
 
   const [currentMovieWatchlist, setCurrentMovieWatchlist] = useState([]);
 
@@ -115,6 +116,28 @@ export default function DetailsScreen({ route }) {
 
       {isSaved ? (
         <>
+          <TouchableOpacity
+        style={styles.removeButton}
+        onPress={() => setRemoveModalOpen(true)}
+      >
+        <Text style={styles.saveButtonText}>Remove</Text>
+      </TouchableOpacity>
+        </>
+      ) : null}
+      <TouchableOpacity
+        style={styles.saveButton}
+        onPress={() => setModalOpen(true)}
+      >
+        <Text style={styles.saveButtonText}>Add</Text>
+      </TouchableOpacity>
+      {/* BEGIN Remove Modal */}
+      {removeModalOpen && (
+        <OptionModal setModalOpen={setModalOpen} movie={item} isSaved={isSaved}>
+          <Text
+            style={[{ color: "#ffffff", fontSize: 20, textAlign: "center" }]}
+          >
+            Are you sure you want to remove this from your list?
+          </Text>
           {currentMovieWatchlist.map((listName) => (
             <TouchableOpacity
               key={listName}
@@ -126,14 +149,25 @@ export default function DetailsScreen({ route }) {
               >{`Remove from ${listName}`}</Text>
             </TouchableOpacity>
           ))}
-        </>
-      ) : null}
-      <TouchableOpacity
-        style={styles.saveButton}
-        onPress={() => setModalOpen(true)}
-      >
-        <Text style={styles.saveButtonText}>Add</Text>
-      </TouchableOpacity>
+          <View style={styles.buttonView}>
+            <TouchableOpacity
+              style={styles.modalSaveButton}
+              onPress={() => handleRemoveButtonClick(value)}
+            >
+              <Text style={[styles.buttonText]}>Yes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalOpen(false)}
+            >
+              <Text style={[styles.buttonText]}>No</Text>
+            </TouchableOpacity>
+          </View>
+        </OptionModal>
+      )}
+      {/* END Remove Modal */}
+
+      
 
       {/* BEGIN Add List Modal */}
       {modalOpen && (

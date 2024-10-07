@@ -126,22 +126,16 @@ export default function DetailsScreen({ route }) {
               >{`Remove from ${listName}`}</Text>
             </TouchableOpacity>
           ))}
-          <TouchableOpacity
-            style={styles.saveButton}
-            onPress={() => setModalOpen(true)}
-          >
-            <Text style={styles.saveButtonText}>Add</Text>
-          </TouchableOpacity>
         </>
-      ) : (
-        <TouchableOpacity
-          style={styles.saveButton}
-          onPress={() => setModalOpen(true)}
-        >
-          <Text style={styles.saveButtonText}>Add</Text>
-        </TouchableOpacity>
-      )}
+      ) : null}
+      <TouchableOpacity
+        style={styles.saveButton}
+        onPress={() => setModalOpen(true)}
+      >
+        <Text style={styles.saveButtonText}>Add</Text>
+      </TouchableOpacity>
 
+      {/* BEGIN Add List Modal */}
       {modalOpen && (
         <OptionModal setModalOpen={setModalOpen} movie={item} isSaved={isSaved}>
           <Text
@@ -223,6 +217,7 @@ export default function DetailsScreen({ route }) {
           </View>
         </OptionModal>
       )}
+      {/* END Add List Modal */}
     </View>
   );
 }
